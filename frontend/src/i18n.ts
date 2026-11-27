@@ -39,6 +39,21 @@ export const pick = (en: string, ar: string) => (current === 'ar' ? ar : en)
 
 export const currency = (lang: Lang = current) => (lang === 'ar' ? 'د.أ' : 'JOD')
 
+/** Counted nouns with correct plural forms. Arabic: 0 · 1 · 2 (dual) · 3–10 (plural) · 11+ (singular accusative). */
+type Countable = 'trip' | 'class' | 'update'
+const FORMS: Record<Countable, { en: [string, string]; ar: [string, string, string, string, string] }> = {
+  trip: { en: ['{n} trip', '{n} trips'], ar: ['لا رحلات', 'رحلة واحدة', 'رحلتان', '{n} رحلات', '{n} رحلة'] },
+  class: { en: ['{n} class', '{n} classes'], ar: ['لا محاضرات', 'محاضرة واحدة', 'محاضرتان', '{n} محاضرات', '{n} محاضرة'] },
+  update: { en: ['{n} update', '{n} updates'], ar: ['لا تحديثات', 'تحديث واحد', 'تحديثان', '{n} تحديثات', '{n} تحديثاً'] },
+}
+export function countLabel(n: number, kind: Countable, lang: Lang = current): string {
+  const f = FORMS[kind]
+  const s = lang === 'ar'
+    ? f.ar[n === 0 ? 0 : n === 1 ? 1 : n === 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : 4]
+    : f.en[n === 1 ? 0 : 1]
+  return s.replace('{n}', String(n))
+}
+
 const AR: Record<string, string> = {
   /* shell */
   'Schedule': 'الجدول', 'Trip': 'الرحلة', 'Journey': 'المسار', 'Pass': 'التذكرة', 'Insights': 'الإحصاءات',
@@ -214,5 +229,85 @@ const AR: Record<string, string> = {
     'لا نخفّف أبداً شرط الجنس أو الكرسي المتحرك أو المنحدر أو سقف الأجرة — حتى لو لم نجد رحلة.',
   'Check {n} highlighted field(s) first': 'راجع الحقول المظلّلة ({n}) أولاً',
   'Max your share: {x}. You approve every price increase.': 'أقصى حصة لك: {x}. وأنت توافق على كل زيادة في السعر.',
+  /* home shell */
+  'Main': 'التنقّل الرئيسي', 'Home': 'الرئيسية', 'Wallet': 'المحفظة', 'History': 'السجل', 'Menu': 'القائمة', 'Open menu': 'فتح القائمة',
+  'Notifications': 'الإشعارات', 'Notifications ({n} new)': 'الإشعارات ({n} جديدة)',
+  'My timetable': 'جدولي', 'My pass': 'تذكرتي', 'Confirmed': 'مؤكَّد', 'Not set yet': 'غير مضاف بعد',
+  'Display name (this device only)': 'الاسم المعروض (على هذا الجهاز فقط)', 'Rider ID {id}': 'رقم الراكب {id}', 'ID {id}': 'الرقم {id}',
+  'Review now': 'راجِع الآن', 'Trip {id} · arrive {a}': 'الرحلة {id} · الوصول {a}',
+  'No notifications yet. Updates about your trips appear here.': 'لا توجد إشعارات بعد. تظهر هنا تحديثات رحلاتك.',
+  'Profile and wallet': 'الملف الشخصي والمحفظة', 'Timetable: {x}': 'الجدول: {x}', '{x} need your OK': '{x} بحاجة لموافقتك',
+  'Trip {id} completed. Welcome back!': 'اكتملت الرحلة {id}. أهلاً بعودتك!',
+  'Where to, {name}?': 'إلى أين يا {name}؟', 'Campus, class or hub': 'الجامعة أو المحاضرة أو المحطة',
+  'Speak your request': 'قل طلبك بالصوت', 'Services': 'الخدمات',
+  'Ride': 'رحلة', 'Your own ride to campus': 'رحلتك الخاصة إلى الجامعة',
+  'Box': 'طرد', 'Send a parcel along your trip': 'أرسل طرداً مع رحلتك',
+  'Carpooling': 'مشاركة الرحلة', 'Share the ride, split fairly': 'شارك الرحلة وقسّم الأجرة بعدل',
+  'UniLink': 'UniLink', 'Accessibility': 'إمكانية الوصول', 'Ramp vehicles only': 'مركبات بمنحدر فقط',
+'Add your timetable': 'أضف جدولك', 'Tap to review or edit': 'اضغط للمراجعة أو التعديل',
+  'Upload a photo or type it in — needed before booking': 'ارفع صورة أو أدخله يدوياً — مطلوب قبل الحجز',
+  'Campus': 'الجامعة', 'ON THE WAY': 'في الطريق', 'CANCELED': 'ملغاة', 'COMPLETED': 'مكتملة', 'Live trip': 'الرحلة المباشرة',
+  'Next: {s}': 'التالي: {s}', 'Arriving': 'على وشك الوصول', 'Paid {x}': 'مدفوع {x}',
+  'View boarding pass': 'عرض تذكرة الصعود',
+  'What UniLink can do': 'ماذا يقدّم UniLink',
+  'Snap your timetable': 'صوّر جدولك',
+  'Gemini reads your classes. You check every field before anything is booked.': 'يقرأ Gemini محاضراتك، وتراجع أنت كل حقل قبل أي حجز.',
+  'Add timetable': 'أضف الجدول',
+  'Carpool to campus, split fairly': 'شارك الرحلة إلى الجامعة بتقسيم عادل',
+  'Each rider pays for the distance they ride. Same-pool riders only.': 'كل راكب يدفع حسب المسافة التي يقطعها، ومع ركّاب من نفس الفئة فقط.',
+  'Find a carpool': 'ابحث عن مشاركة',
+  'Accessibility first': 'إمكانية الوصول أولاً',
+  'Ramp vehicles only. If none is free, we tell you honestly.': 'مركبات بمنحدر فقط. وإن لم تتوفر، نخبرك بصراحة.',
+  'Accessible ride': 'رحلة مهيّأة',
+  'Emergency mode looks for a car already on the road to campus.': 'وضع الطوارئ يبحث عن سيارة في طريقها إلى الجامعة.',
+  'Plan now': 'خطّط الآن',
+  'Ride: ride alone': 'رحلة: بمفردك', 'Carpooling: up to 3 companions': 'مشاركة: حتى 3 مرافقين', 'Accessibility: wheelchair on': 'إمكانية الوصول: الكرسي المتحرك مفعّل',
+
+  /* voice */
+  'Voice assistant': 'المساعد الصوتي',
+  'Say or type what you need, e.g. “book a ride to campus” or “بدي روح عالجامعة”.': 'قل أو اكتب ما تحتاجه، مثل «بدي روح عالجامعة» أو «احجزلي مشوار».',
+  'Stop listening': 'إيقاف الاستماع', 'Start listening': 'ابدأ الاستماع',
+  'Speech input is not available in this browser. Type your request instead.': 'الإدخال الصوتي غير متاح في هذا المتصفح. اكتب طلبك بدلاً من ذلك.',
+  'Your request': 'طلبك', 'Send': 'إرسال',
+  'Voice is not connected to the live engine in this build.': 'الصوت غير متصل بالمحرك الحقيقي في هذه النسخة.',
+  'Confidence {c}%': 'الثقة {c}%', 'Nothing was booked or paid': 'لم يُحجز أو يُدفع أي شيء',
+  'Open my pass': 'افتح تذكرتي', 'Review the Best Deal': 'راجِع أفضل صفقة', 'Review the change': 'راجِع التغيير',
+
+  /* ride & box */
+  'Ride & Box': 'رحلة وطرد',
+  'A sealed parcel (up to 5 kg) travels along a trip you already booked. Never offered on wheelchair trips.':
+    'طرد مغلق (حتى 5 كغ) يسافر مع رحلة حجزتها مسبقاً. لا يُعرض أبداً في رحلات الكرسي المتحرك.',
+  'Book a ride first — Box rides along your booked trip.': 'احجز رحلة أولاً — الطرد يرافق رحلتك المحجوزة.',
+  'Parcel size': 'حجم الطرد', 'Small': 'صغير', 'Medium': 'متوسط', 'Weight (kg)': 'الوزن (كغ)',
+  'Declared value (JOD)': 'القيمة المصرّح بها (د.أ)', 'Used for the insurance part of the quote.': 'تُستخدم لحساب جزء التأمين من السعر.',
+  'Get a quote': 'احصل على سعر', 'Ride & Box is not connected to the live engine in this build.': 'خدمة الطرد غير متصلة بالمحرك الحقيقي في هذه النسخة.',
+  'Parcel fee': 'رسوم الطرد', 'Insurance': 'التأمين', 'Total': 'المجموع', 'Driver gets': 'حصة السائق', 'Jeeny gets': 'حصة Jeeny',
+  'Corridor {k} km · quote only, no shipment is created (simulation).': 'المسار {k} كم · سعر فقط، ولا تُنشأ أي شحنة (محاكاة).',
+
+  /* history */
+  'Your trips': 'رحلاتك', 'Every booking in this simulated session.': 'كل الحجوزات في جلسة المحاكاة هذه.', 'No trips yet.': 'لا توجد رحلات بعد.',
+  'Class {c} · arrive {a} · leave {l}': 'المحاضرة {c} · الوصول {a} · الانطلاق {l}',
+
+  /* insights */
+  'No data for this day.': 'لا توجد بيانات لهذا اليوم.', 'Ramp vehicles free': 'مركبات بمنحدر متاحة', 'Wheelchair requests': 'طلبات الكرسي المتحرك',
+  'Riders opted in to share': 'ركّاب وافقوا على المشاركة', 'Requests by class hour': 'الطلبات حسب ساعة المحاضرة', 'Requests by zone': 'الطلبات حسب المنطقة',
+  'Shuttle seats left': 'المقاعد المتبقية في الشاتل', 'Tomorrow': 'غداً',
+  'Your timetable has a {c} class on {d}. We can suggest booking it — nothing is booked automatically.':
+    'في جدولك محاضرة الساعة {c} يوم {d}. يمكننا اقتراح حجزها — لا يُحجز شيء تلقائياً.',
+  'No class tomorrow in your saved timetable.': 'لا توجد محاضرة غداً في جدولك المحفوظ.',
+  'Rule: timetable frequency · no auto-booking': 'القاعدة: تكرار الجدول · بلا حجز تلقائي',
+  'B2B semester pass example': 'مثال على باقة الفصل للمؤسسات',
+  '{n} trips · university pays {u} · student pays {s}': '{n} رحلة · تدفع الجامعة {u} · يدفع الطالب {s}',
+  'Irbid East': 'إربد الشرقية', 'Irbid Nuzha': 'إربد النزهة', 'Sweileh': 'صويلح',
+
+  /* wallet */
+  'JEENY WALLET · SIMULATED': 'محفظة JEENY · محاكاة',
+  'No payments yet. Booking a ride debits the wallet here.': 'لا توجد مدفوعات بعد. حجز الرحلة يُخصم من المحفظة هنا.',
+  'Debit': 'خصم', 'Refund': 'استرداد', 'UniPass · semester pass': 'UniPass · باقة الفصل',
+  'Example the engine computed for a university-subsidised pass, based on your current fare share.':
+    'مثال حسبه المحرك لباقة مدعومة من الجامعة، بناءً على حصتك الحالية من الأجرة.',
+  'Trips in the semester': 'رحلات الفصل', 'Fare share per trip': 'حصتك لكل رحلة', 'Semester total': 'مجموع الفصل',
+  'University pays': 'تدفع الجامعة', 'Student pays': 'يدفع الطالب', 'Simulation data · not an offer': 'بيانات محاكاة · ليست عرضاً',
+  'Not connected to the live engine in this build.': 'غير متصل بالمحرك الحقيقي في هذه النسخة.',
 }
 export const AR_KEYS = Object.keys(AR)

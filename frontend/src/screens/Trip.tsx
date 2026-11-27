@@ -39,20 +39,20 @@ function defaultPickup(classStart?: string): string {
 
 export default function Trip() {
   const t = useT()
-  const { sessionId, riderToken, classes, request, runPlan, go, sim, setSim } = useStore()
+  const { sessionId, riderToken, classes, request, runPlan, go, sim, setSim, preset } = useStore()
   const init = request
   const [zone, setZone] = useState(init?.zone_id ?? 'irbid_east')
   const [date, setDate] = useState(init?.service_date ?? '2026-11-29')
   const [classStart, setClassStart] = useState(init?.class_start ?? '')
   const [buffer, setBuffer] = useState(init?.arrival_buffer_min ?? 10)
   const [pool, setPool] = useState<GenderPool>(init?.gender_pool ?? 'female_only')
-  const [companions, setCompanions] = useState(init?.desired_companions ?? 3)
+  const [companions, setCompanions] = useState(init?.desired_companions ?? preset?.companions ?? 3)
   // null = follow the chosen class; a string = an explicit rider edit (or DevDrawer preset).
   const [pickupOverride, setPickupOverride] = useState<string | null>(
     init?.preferred_pickup && init.preferred_pickup !== defaultPickup(init.class_start) ? init.preferred_pickup : null,
   )
-  const [capJod, setCapJod] = useState(init ? init.fare_cap_fils / 1000 : 2)
-  const [wheelchair, setWheelchair] = useState(init?.accessibility.wheelchair ?? false)
+  const [capJod, setCapJod] = useState(init ? init.fare_cap_fils / 1000 : preset?.capJod ?? 2)
+  const [wheelchair, setWheelchair] = useState(init?.accessibility.wheelchair ?? preset?.wheelchair ?? false)
   const [bigCar, setBigCar] = useState(init?.accessibility.big_car ?? false)
   const [optIn, setOptIn] = useState(init?.sharing_opt_in ?? true)
 
@@ -109,7 +109,10 @@ export default function Trip() {
   return (
     <div className="space-y-4">
       <Intro title={t('Plan your ride')} text={t('Door-to-Door to campus, shared fairly. Tell us what matters.')} />
-      <MockChip endpoint="plan" />
+      <div className="flex flex-wrap gap-2">
+        <MockChip endpoint="plan" />
+        {preset && !init && <Chip tone="lime">{t(preset.service === 'ride' ? 'Ride: ride alone' : preset.service === 'carpool' ? 'Carpooling: up to 3 companions' : 'Accessibility: wheelchair on')}</Chip>}
+      </div>
 
       <Card className="space-y-4">
         <Field label={t('Where from?')}>
