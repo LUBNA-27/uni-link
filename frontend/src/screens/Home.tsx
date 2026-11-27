@@ -5,6 +5,7 @@ import {
 import { useStore, type Service } from '../store'
 import { useT } from '../useT'
 import { jod } from '../format'
+import { countLabel } from '../i18n'
 import type { SimState, TripView } from '../types'
 import { BellButton, initials, MenuIcon } from '../components/Chrome'
 import { Chip } from '../components/ui'
@@ -14,7 +15,7 @@ const isActive = (x: TripView) => x.status !== 'canceled' && x.status !== 'compl
 
 export default function Home({ onMenu, onNotif }: { onMenu: () => void; onNotif: () => void }) {
   const t = useT()
-  const { sim, displayName, riderToken, go, startService, timetableConfirmed, classes } = useStore()
+  const { sim, displayName, riderToken, go, startService, timetableConfirmed, classes, lang } = useStore()
   const [voice, setVoice] = useState(false)
   const [box, setBox] = useState(false)
   const trip = sim?.trips.find(isActive)
@@ -39,7 +40,7 @@ export default function Home({ onMenu, onNotif }: { onMenu: () => void; onNotif:
   const name = displayName.trim() || 'Lubna'
 
   return (
-    <div className="pb-32">
+    <div className="pb-36">
       <header className="relative overflow-hidden rounded-b-[2rem] bg-plum-2 px-4 pb-5 pt-4 shadow-xl">
         <RouteDecor />
         <div className="relative flex items-center gap-3">
@@ -55,7 +56,7 @@ export default function Home({ onMenu, onNotif }: { onMenu: () => void; onNotif:
                     <Wallet className="size-3" aria-hidden />{jod(sim.wallet.balance_fils)}
                   </span>
                 )}
-                {sim && <span className="rounded-full bg-white/10 px-2 py-0.5">{t('Trips: {n}', { n: sim.trips.length })}</span>}
+                {sim && <span className="rounded-full bg-white/10 px-2 py-0.5">{countLabel(sim.trips.length, 'trip', lang)}</span>}
               </span>
             </span>
           </button>
@@ -73,7 +74,7 @@ export default function Home({ onMenu, onNotif }: { onMenu: () => void; onNotif:
           <button onClick={() => (timetableConfirmed ? go('trip') : go('schedule'))} className="flex min-h-12 min-w-0 flex-1 items-center gap-3 rounded-xl px-2 text-start">
             <Search className="size-5 shrink-0 text-magenta" aria-hidden />
             <span className="min-w-0">
-              <span className="block truncate text-base font-black text-plum">{t('Where to, {name}?', { name: name.toUpperCase() })}</span>
+              <span className="block truncate text-base font-black text-plum">{t('Where to, {name}?', { name: `\u2068${name.toUpperCase()}\u2069` })}</span>
               <span className="block truncate text-xs font-semibold text-plum/55">{t('Campus, class or hub')}</span>
             </span>
           </button>
@@ -98,7 +99,7 @@ export default function Home({ onMenu, onNotif }: { onMenu: () => void; onNotif:
         <button onClick={() => go('schedule')} className="flex min-h-16 w-full items-center gap-3 rounded-2xl bg-plum-2 p-3 text-start">
           <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-lime text-plum"><CalendarDays className="size-5" aria-hidden /></span>
           <span className="min-w-0 flex-1">
-            <span className="block font-extrabold">{timetableConfirmed ? t('Timetable: {n} classes', { n: classes.length }) : t('Add your timetable')}</span>
+            <span className="block font-extrabold">{timetableConfirmed ? t('Timetable: {x}', { x: countLabel(classes.length, 'class', lang) }) : t('Add your timetable')}</span>
             <span className="block text-xs text-white/65">{timetableConfirmed ? t('Tap to review or edit') : t('Upload a photo or type it in — needed before booking')}</span>
           </span>
           <ArrowRight className="size-5 text-lime rtl:rotate-180" aria-hidden />
@@ -114,7 +115,7 @@ export default function Home({ onMenu, onNotif }: { onMenu: () => void; onNotif:
 /* ───────────── live tracking card (pushes the rest of Home down) ───────────── */
 function TrackingCard({ trip, sim }: { trip: TripView; sim: SimState }) {
   const t = useT()
-  const { go } = useStore()
+  const { go, lang } = useStore()
   const p = trip.plan
   const stops = [
     ...(p.pickups ?? []).map((s) => ({ key: s.rider_token, label: s.is_you ? t('You') : t(s.landmark).split(' · ')[0], time: s.time, you: s.is_you })),
@@ -173,7 +174,7 @@ function TrackingCard({ trip, sim }: { trip: TripView; sim: SimState }) {
 
         {pending > 0 && (
           <button onClick={() => go('booked')} className="mt-3 flex min-h-12 w-full items-center gap-2 rounded-2xl bg-plum px-3 text-start text-sm font-extrabold text-white">
-            <BellRing className="size-5 text-lime" aria-hidden /> <span className="flex-1">{t('{n} update(s) need your OK', { n: pending })}</span>
+            <BellRing className="size-5 text-lime" aria-hidden /> <span className="flex-1">{t('{x} need your OK', { x: countLabel(pending, 'update', lang) })}</span>
             <ArrowRight className="size-4 rtl:rotate-180" aria-hidden />
           </button>
         )}

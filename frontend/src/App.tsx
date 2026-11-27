@@ -31,7 +31,7 @@ function Shell() {
       {view === 'home' ? (
         <Home onMenu={() => setMenu(true)} onNotif={() => setNotif(true)} />
       ) : (
-        <main className="flex-1 px-4 pb-32 pt-4">
+        <main className="flex-1 px-4 pb-36 pt-4">
           {view === 'schedule' && <Schedule />}
           {view === 'trip' && <Trip />}
           {view === 'journey' && <Journey />}

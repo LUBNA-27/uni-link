@@ -16,7 +16,7 @@ with sync_playwright() as p:
     pg.on("pageerror", lambda e: errors.append(str(e)))
     api("/api/simulation/event", {"session_id": S, "event": "reset"})
     pg.goto(f"{BASE}/?session={S}")   # plain URL: DEFAULT_LIVE must be all true
-    pg.wait_for_selector("text=Where to, LUBNA?")
+    pg.wait_for_selector("text=Where to,")
     pg.screenshot(path="/tmp/unilink_shot_0_home.png", full_page=True)
     step("Home shell: profile, Where to + mic, promos, 4 services, bottom nav")
     pg.click("text=Add your timetable"); pg.wait_for_selector("text=Your timetable, once.")

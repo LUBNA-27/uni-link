@@ -1,4 +1,4 @@
-# 2026-11-27T18:47Z — feat/home-shell-jeeny-ui, headless Chrome vs local uvicorn
+# 2026-11-27T18:59Z — feat/home-shell-jeeny-ui, headless Chrome vs local uvicorn
    Home shell: profile, Where to + mic, promos, 4 services, bottom nav
    plain URL (no ?live) — no MOCK banner, all endpoints live
    manual timetable → /api/timetable/manual + /confirm (live)

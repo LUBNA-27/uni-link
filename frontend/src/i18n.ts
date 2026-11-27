@@ -39,6 +39,21 @@ export const pick = (en: string, ar: string) => (current === 'ar' ? ar : en)
 
 export const currency = (lang: Lang = current) => (lang === 'ar' ? 'د.أ' : 'JOD')
 
+/** Counted nouns with correct plural forms. Arabic: 0 · 1 · 2 (dual) · 3–10 (plural) · 11+ (singular accusative). */
+type Countable = 'trip' | 'class' | 'update'
+const FORMS: Record<Countable, { en: [string, string]; ar: [string, string, string, string, string] }> = {
+  trip: { en: ['{n} trip', '{n} trips'], ar: ['لا رحلات', 'رحلة واحدة', 'رحلتان', '{n} رحلات', '{n} رحلة'] },
+  class: { en: ['{n} class', '{n} classes'], ar: ['لا محاضرات', 'محاضرة واحدة', 'محاضرتان', '{n} محاضرات', '{n} محاضرة'] },
+  update: { en: ['{n} update', '{n} updates'], ar: ['لا تحديثات', 'تحديث واحد', 'تحديثان', '{n} تحديثات', '{n} تحديثاً'] },
+}
+export function countLabel(n: number, kind: Countable, lang: Lang = current): string {
+  const f = FORMS[kind]
+  const s = lang === 'ar'
+    ? f.ar[n === 0 ? 0 : n === 1 ? 1 : n === 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : 4]
+    : f.en[n === 1 ? 0 : 1]
+  return s.replace('{n}', String(n))
+}
+
 const AR: Record<string, string> = {
   /* shell */
   'Schedule': 'الجدول', 'Trip': 'الرحلة', 'Journey': 'المسار', 'Pass': 'التذكرة', 'Insights': 'الإحصاءات',
@@ -221,7 +236,7 @@ const AR: Record<string, string> = {
   'Display name (this device only)': 'الاسم المعروض (على هذا الجهاز فقط)', 'Rider ID {id}': 'رقم الراكب {id}', 'ID {id}': 'الرقم {id}',
   'Review now': 'راجِع الآن', 'Trip {id} · arrive {a}': 'الرحلة {id} · الوصول {a}',
   'No notifications yet. Updates about your trips appear here.': 'لا توجد إشعارات بعد. تظهر هنا تحديثات رحلاتك.',
-  'Profile and wallet': 'الملف الشخصي والمحفظة', 'Trips: {n}': 'الرحلات: {n}',
+  'Profile and wallet': 'الملف الشخصي والمحفظة', 'Timetable: {x}': 'الجدول: {x}', '{x} need your OK': '{x} بحاجة لموافقتك',
   'Trip {id} completed. Welcome back!': 'اكتملت الرحلة {id}. أهلاً بعودتك!',
   'Where to, {name}?': 'إلى أين يا {name}؟', 'Campus, class or hub': 'الجامعة أو المحاضرة أو المحطة',
   'Speak your request': 'قل طلبك بالصوت', 'Services': 'الخدمات',
@@ -229,11 +244,11 @@ const AR: Record<string, string> = {
   'Box': 'طرد', 'Send a parcel along your trip': 'أرسل طرداً مع رحلتك',
   'Carpooling': 'مشاركة الرحلة', 'Share the ride, split fairly': 'شارك الرحلة وقسّم الأجرة بعدل',
   'UniLink': 'UniLink', 'Accessibility': 'إمكانية الوصول', 'Ramp vehicles only': 'مركبات بمنحدر فقط',
-  'Timetable: {n} classes': 'الجدول: {n} محاضرات', 'Add your timetable': 'أضف جدولك', 'Tap to review or edit': 'اضغط للمراجعة أو التعديل',
+'Add your timetable': 'أضف جدولك', 'Tap to review or edit': 'اضغط للمراجعة أو التعديل',
   'Upload a photo or type it in — needed before booking': 'ارفع صورة أو أدخله يدوياً — مطلوب قبل الحجز',
   'Campus': 'الجامعة', 'ON THE WAY': 'في الطريق', 'CANCELED': 'ملغاة', 'COMPLETED': 'مكتملة', 'Live trip': 'الرحلة المباشرة',
   'Next: {s}': 'التالي: {s}', 'Arriving': 'على وشك الوصول', 'Paid {x}': 'مدفوع {x}',
-  '{n} update(s) need your OK': '{n} تحديث يحتاج موافقتك', 'View boarding pass': 'عرض تذكرة الصعود',
+  'View boarding pass': 'عرض تذكرة الصعود',
   'What UniLink can do': 'ماذا يقدّم UniLink',
   'Snap your timetable': 'صوّر جدولك',
   'Gemini reads your classes. You check every field before anything is booked.': 'يقرأ Gemini محاضراتك، وتراجع أنت كل حقل قبل أي حجز.',
