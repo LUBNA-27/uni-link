@@ -52,10 +52,12 @@ def test_live_extraction_against_ground_truth(img: Path):
                    files={"image": (img.name, data, _mime(data))})
     assert r.status_code == 200, f"HTTP {r.status_code}: {r.text[:300]}"
     body = r.json()
-    print(f"\n{img.name}: configured {model}, API reported {body.get('model')}")
+    print(f"\n{img.name}: configured {model} (fallback {vision.fallback_model()}), API reported {body.get('model')}")
     assert body["classes"], "model returned no classes: an empty extraction never passes"
     assert body["inference_source"] == "gemini_vision" and body["source"] == "inference"
-    assert str(body.get("model", "")).startswith(model), f"served model {body.get('model')!r} != configured {model!r}"
+    allowed = [m for m in (model, vision.fallback_model()) if m]      # the fallback may answer on a 503/504/timeout
+    assert any(str(body.get("model", "")).startswith(m) for m in allowed), \
+        f"served model {body.get('model')!r} not in configured {allowed!r}"
     assert KEY not in r.text
     rep = evaluate(img.name, body, r.text, truth, KEY)
     RESULTS[img.stem] = r.json()
