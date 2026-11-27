@@ -1,6 +1,23 @@
+# Python
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Secrets & local env
 .env
+.env.*
+*.local
+
+# Node / Frontend build
 node_modules/
 frontend/dist/
+dist/
+dist-ssr/
+
+# Logs & editors
+logs/
+*.log
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
