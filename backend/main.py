@@ -26,12 +26,13 @@ from starlette.concurrency import run_in_threadpool
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import contract as C
-from . import pricing, vision, voice, wire
+from . import pricing, vision, voice, voice_ai, wire
 from .errors import ApiError
 from .fixtures import get_fixtures
 from .predict import suggest_tomorrow
 from .schemas import (HealthResponse, InsightsResponse, ParcelQuoteRequest, ParcelQuoteResponse, SplitInviteRequest,
-                      SplitInviteResponse, VoiceIntentRequest, VoiceIntentResponse)
+                      SplitInviteResponse, VoiceIntentRequest, VoiceIntentResponse,
+                      VoiceUnderstandRequest, VoiceUnderstandResponse)
 from .state import Session, SessionStore
 from .timeutil import to_hhmm
 
@@ -211,6 +212,14 @@ def simulation_event(req: C.SimEventRequest) -> C.SimState:
 @app.post("/api/voice/intent", response_model=VoiceIntentResponse)
 def voice_intent(req: VoiceIntentRequest) -> VoiceIntentResponse:
     return _locked(req.session_id, lambda s: voice.respond(s, req.transcript, req.locale))
+
+
+@app.post("/api/voice/understand", response_model=VoiceUnderstandResponse)
+async def voice_understand(req: VoiceUnderstandRequest) -> VoiceUnderstandResponse:
+    # Gemini call off the event loop (single worker); read-only, touches no session state
+    out, model, ms = await run_in_threadpool(voice_ai.understand, req.transcript, req.locale,
+                                             dict(req.places), dict(req.destinations))
+    return VoiceUnderstandResponse(**out, model=model, inference_ms=ms)
 
 
 @app.get("/api/insights", response_model=InsightsResponse)
