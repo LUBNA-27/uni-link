@@ -328,3 +328,59 @@ export interface InsightsResponse {
   metrics: InsightMetric[]
   source: 'simulation'
 }
+
+/* ───────────── fleet insights (as served by GET /api/insights) ───────────── */
+/** Aggregates the backend computes from the synthetic fixtures. Rendered as-is; never mocked. */
+export interface FleetInsights {
+  requests_by_hour: Record<string, number>
+  requests_by_zone: Record<string, number>
+  accessible_requests: number
+  opted_in_riders: number
+  shuttle_seats: Record<string, number>
+  wav_available: number
+  wav_total: number
+  /** B2B semester-pass subsidy example (fils), computed separately from passenger fares */
+  b2b_semester_pass_example: Record<string, number>
+  prediction?: Record<string, string | boolean> | null
+  source: 'simulation'
+}
+
+/* ───────────── voice intent (POST /api/voice/intent) ───────────── */
+export type VoiceIntent =
+  | 'plan_trip' | 'read_route' | 'accept_best_deal' | 'approve_rescue' | 'decline'
+  | 'shift_to_next_class' | 'emergency_ride' | 'repeat' | 'unknown'
+export interface VoiceIntentResponse {
+  intent: VoiceIntent
+  confidence: number
+  slots: Record<string, string>
+  readback_ar: string
+  readback_en: string
+  requires_confirmation: boolean
+  /** the server never acts on voice alone */
+  action_taken: 'none'
+  plan_id?: string | null
+  plan_revision: number
+  fare_fils?: Fils | null
+  source: 'simulation'
+}
+
+/* ───────────── Ride & Box (POST /api/parcels/quote) ───────────── */
+export interface ParcelQuoteRequest {
+  session_id: string
+  trip_id: string
+  declared_value_fils: Fils
+  size: 'small' | 'medium'
+  weight_g: number
+}
+export interface ParcelQuoteResponse {
+  trip_id: string
+  corridor_km: string
+  parcel_fee_fils: Fils
+  insurance_fils: Fils
+  total_fils: Fils
+  driver_share_fils: Fils
+  jeeny_share_fils: Fils
+  /** always false: a quote never creates a shipment */
+  shipment_created: false
+  source: 'simulation'
+}

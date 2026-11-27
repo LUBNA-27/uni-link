@@ -37,3 +37,19 @@ button { touch-action: manipulation; }
 @keyframes reveal-in { from { opacity: 0; transform: translateY(12px) scale(.98) } to { opacity: 1; transform: none } }
 .reveal { animation: reveal-in .45s ease-out both }
 @media (prefers-reduced-motion: reduce) { .reveal { animation: none } }
+
+/* Home shell motion (all disabled for reduced motion) */
+.no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+@keyframes menu-in-ltr { from { transform: translateX(-100%) } to { transform: none } }
+@keyframes menu-in-rtl { from { transform: translateX(100%) } to { transform: none } }
+.menu-in { animation: menu-in-ltr .25s ease-out both }
+[dir="rtl"] .menu-in { animation-name: menu-in-rtl }
+@keyframes live-dot { 50% { opacity: .25 } }
+.live-dot { animation: live-dot 1.2s ease-in-out infinite }
+@keyframes mic-pulse { 0% { box-shadow: 0 0 0 0 rgb(236 0 140 / .55) } 100% { box-shadow: 0 0 0 22px rgb(236 0 140 / 0) } }
+.mic-pulse { animation: mic-pulse 1.2s ease-out infinite }
+@keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+.float-a { animation: float 5s ease-in-out infinite } .float-b { animation: float 6.5s ease-in-out infinite reverse }
+@media (prefers-reduced-motion: reduce) {
+  .menu-in, .live-dot, .mic-pulse, .float-a, .float-b { animation: none }
+}

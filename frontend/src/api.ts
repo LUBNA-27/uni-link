@@ -10,13 +10,15 @@ import * as mock from './mock'
 import type {
   ClassItem, ConfirmRequest, ConfirmResponse, EmergencyRequest, EmergencyResponse, HealthResponse,
   PlanRequest, PlanResponse, ShiftRequest, ShiftResponse, SimEventRequest, SimState,
-  TimetableConfirmResponse, TimetableResponse, InsightsResponse,
+  TimetableConfirmResponse, TimetableResponse, FleetInsights,
+  ParcelQuoteRequest, ParcelQuoteResponse, VoiceIntentResponse,
 } from './types'
 
 export { ApiError }
 
 export type Endpoint =
   | 'health' | 'parse' | 'manual' | 'confirmTT' | 'plan' | 'confirm' | 'shift' | 'emergency' | 'state' | 'event' | 'insights'
+  | 'voice' | 'parcel'
 
 /** Release: all implemented endpoints use the live backend by default. */
 const DEFAULT_LIVE: Record<Endpoint, boolean> = {
@@ -31,6 +33,8 @@ const DEFAULT_LIVE: Record<Endpoint, boolean> = {
   state: true,
   event: true,
   insights: true,
+  voice: true,
+  parcel: true,
 }
 
 function resolveLive(): Record<Endpoint, boolean> {
@@ -45,8 +49,9 @@ function resolveLive(): Record<Endpoint, boolean> {
 }
 export const LIVE = resolveLive()
 export const isMock = (e: Endpoint) => !LIVE[e]
-// `insights` never has a mock (no invented statistics), so it does not count as MOCK data.
-export const anyMock = () => (Object.keys(LIVE) as Endpoint[]).some((k) => k !== 'health' && k !== 'insights' && !LIVE[k])
+// `insights`, `voice` and `parcel` never have a mock (no invented numbers), so they do not count as MOCK data.
+const NO_MOCK: Endpoint[] = ['health', 'insights', 'voice', 'parcel']
+export const anyMock = () => (Object.keys(LIVE) as Endpoint[]).some((k) => !NO_MOCK.includes(k) && !LIVE[k])
 
 async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {
   let res: Response
@@ -96,8 +101,14 @@ export const api = {
   simState: (session_id: string): Promise<SimState> =>
     LIVE.state ? call('GET', `/api/simulation/state?session_id=${encodeURIComponent(session_id)}`) : mock.simState(),
   /** Real computed statistics only. Returns null while the endpoint is not live — NEVER a mock number. */
-  insights: (session_id: string): Promise<InsightsResponse | null> =>
+  insights: (session_id: string): Promise<FleetInsights | null> =>
     LIVE.insights ? call('GET', `/api/insights?session_id=${encodeURIComponent(session_id)}`) : Promise.resolve(null),
+  /** Whitelist voice intent. Read-back only: the server never moves money or books on voice alone. */
+  voiceIntent: (session_id: string, transcript: string, locale: 'ar-JO' | 'en'): Promise<VoiceIntentResponse | null> =>
+    LIVE.voice ? call('POST', '/api/voice/intent', { session_id, transcript, locale }) : Promise.resolve(null),
+  /** Ride & Box quote on a booked trip. A quote never creates a shipment. */
+  parcelQuote: (req: ParcelQuoteRequest): Promise<ParcelQuoteResponse | null> =>
+    LIVE.parcel ? call('POST', '/api/parcels/quote', req) : Promise.resolve(null),
   simEvent: (req: SimEventRequest): Promise<SimState> =>
     LIVE.event ? call('POST', '/api/simulation/event', req) : mock.simEvent(req),
 }
