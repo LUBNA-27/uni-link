@@ -131,6 +131,16 @@ class VoiceIntentRequest(_In):
     locale: Literal["ar-JO", "en"] = "ar-JO"
 
 
+class VoiceUnderstandRequest(_In):
+    """Optional Gemini understanding for the prototype assistant. Read-only: never books or pays."""
+    transcript: Annotated[str, StringConstraints(min_length=1, max_length=300)]
+    locale: Literal["ar-JO", "en"] = "en"
+    places: dict[Annotated[str, StringConstraints(pattern=r"^[a-z0-9_]{1,24}$")],
+                 Annotated[str, StringConstraints(max_length=60)]] = Field(default_factory=dict, max_length=20)
+    destinations: dict[Annotated[str, StringConstraints(pattern=r"^[a-z0-9_]{1,24}$")],
+                       Annotated[str, StringConstraints(max_length=60)]] = Field(default_factory=dict, max_length=20)
+
+
 # ----------------------------------------------------------------------------- responses
 class ErrorBody(_Out):
     code: str
@@ -395,6 +405,19 @@ class ParcelQuoteResponse(_Out):
     jeeny_share_fils: Fils
     shipment_created: Literal[False] = False
     source: Source = "simulation"
+
+
+class VoiceUnderstandResponse(_Out):
+    intent: Literal["plan", "late", "box", "wallet", "route", "timetable", "unknown"]
+    origin: str
+    destination: str
+    time: str
+    pool: Literal["female", "male", ""]
+    reply: str
+    action_taken: Literal["none"] = "none"
+    inference_source: Literal["gemini"] = "gemini"
+    model: str
+    inference_ms: float
 
 
 class VoiceIntentResponse(_Out):
