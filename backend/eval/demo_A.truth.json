@@ -1,0 +1,23 @@
+[
+ {
+  "weekday": "Sun",
+  "course": "CS 201 Data Structures",
+  "start": "08:30",
+  "end": "09:30",
+  "room": "Eng 102"
+ },
+ {
+  "weekday": "Sun",
+  "course": "AI 305 Machine Learning",
+  "start": "11:30",
+  "end": "12:30",
+  "room": "IT 214"
+ },
+ {
+  "weekday": "Tue",
+  "course": "CS 250 Databases",
+  "start": "10:00",
+  "end": "11:00",
+  "room": "Eng 110"
+ }
+]

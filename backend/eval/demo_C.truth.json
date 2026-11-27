@@ -1,0 +1,16 @@
+[
+ {
+  "weekday": "Mon",
+  "course": "MATH 241 Linear Algebra",
+  "start": "09:00",
+  "end": "10:00",
+  "room": null
+ },
+ {
+  "weekday": "Wed",
+  "course": "PHYS 102 General Physics",
+  "start": null,
+  "end": "13:00",
+  "room": "Sci 12"
+ }
+]

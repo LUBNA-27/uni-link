@@ -1,0 +1,32 @@
+{
+  "source": "simulation",
+  "shuttles": [
+    {
+      "shuttle_id": "S1",
+      "campus_id": "JUST",
+      "hub": "T_irbid",
+      "depart": "07:55",
+      "arrive": "08:13",
+      "seats": 3,
+      "access_verified": true
+    },
+    {
+      "shuttle_id": "S2",
+      "campus_id": "JUST",
+      "hub": "T_irbid",
+      "depart": "08:15",
+      "arrive": "08:33",
+      "seats": 30,
+      "access_verified": true
+    },
+    {
+      "shuttle_id": "AAU-SH1",
+      "campus_id": "AAU",
+      "hub": "H_sweileh",
+      "depart": "08:20",
+      "arrive": "08:40",
+      "seats": 20,
+      "access_verified": false
+    }
+  ]
+}

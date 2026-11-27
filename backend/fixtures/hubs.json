@@ -1,0 +1,75 @@
+{
+  "source": "simulation",
+  "legs": {
+    "A>B": {
+      "km": "2",
+      "peak_min": 6,
+      "off_min": 5
+    },
+    "B>C": {
+      "km": "1",
+      "peak_min": 4,
+      "off_min": 4
+    },
+    "C>D": {
+      "km": "1",
+      "peak_min": 2,
+      "off_min": 2
+    },
+    "B>D": {
+      "km": "2",
+      "peak_min": 4,
+      "off_min": 3
+    },
+    "A>C": {
+      "km": "3",
+      "peak_min": 10,
+      "off_min": 9
+    },
+    "A>D": {
+      "km": "4",
+      "peak_min": 12,
+      "off_min": 10
+    },
+    "D>JUST_GATE": {
+      "km": "11",
+      "peak_min": 18,
+      "off_min": 15
+    },
+    "C>JUST_GATE": {
+      "km": "12",
+      "peak_min": 20,
+      "off_min": 16
+    },
+    "B>JUST_GATE": {
+      "km": "13",
+      "peak_min": 24,
+      "off_min": 20
+    },
+    "A>JUST_GATE": {
+      "km": "14",
+      "peak_min": 26,
+      "off_min": 22
+    },
+    "W>AAU_GATE": {
+      "km": "6",
+      "peak_min": 17,
+      "off_min": 17
+    },
+    "P_irbid_east>T_irbid": {
+      "km": "3",
+      "peak_min": 8,
+      "off_min": 7
+    },
+    "T_irbid>JUST_GATE": {
+      "km": "9.5",
+      "peak_min": 15,
+      "off_min": 12
+    },
+    "S2P>H_sweileh": {
+      "km": "2",
+      "peak_min": 6,
+      "off_min": 5
+    }
+  }
+}

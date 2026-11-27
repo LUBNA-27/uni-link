@@ -1,0 +1,23 @@
+[
+ {
+  "weekday": "Sun",
+  "course": "AI 454 Natural Language Processing",
+  "start": "10:00",
+  "end": "11:30",
+  "room": "IT 301"
+ },
+ {
+  "weekday": "Mon",
+  "course": "AI 381 MLOps",
+  "start": "12:00",
+  "end": "13:00",
+  "room": "Lab 4"
+ },
+ {
+  "weekday": "Wed",
+  "course": "CS 330 Operating Systems",
+  "start": "14:00",
+  "end": "15:30",
+  "room": "Eng 205"
+ }
+]

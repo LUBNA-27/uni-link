@@ -1,0 +1,7 @@
+........................................................................ [ 58%]
+...........................sssss...................                      [100%]
+=========================== short test summary info ============================
+SKIPPED [1] backend/tests/test_gemini_live.py:39: live Gemini test needs GEMINI_API_KEY (Replit Secret)
+SKIPPED [3] backend/tests/test_gemini_live.py:44: live Gemini test needs GEMINI_API_KEY (Replit Secret)
+SKIPPED [1] backend/tests/test_gemini_live.py:60: live Gemini test needs GEMINI_API_KEY (Replit Secret)
+118 passed, 5 skipped in 3.55s

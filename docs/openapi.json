@@ -1,0 +1,2841 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "UniLink 2.0 API (simulation)",
+  "version": "rev-e"
+ },
+ "paths": {
+  "/api/health": {
+   "get": {
+    "summary": "Health",
+    "operationId": "health_api_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HealthResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/timetable/parse": {
+   "post": {
+    "summary": "Timetable Parse",
+    "operationId": "timetable_parse_api_timetable_parse_post",
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_timetable_parse_api_timetable_parse_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TimetableResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/timetable/manual": {
+   "post": {
+    "summary": "Timetable Manual",
+    "operationId": "timetable_manual_api_timetable_manual_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TimetableRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TimetableResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/timetable/confirm": {
+   "post": {
+    "summary": "Timetable Confirm",
+    "operationId": "timetable_confirm_api_timetable_confirm_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TimetableRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TimetableConfirmResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/plan": {
+   "post": {
+    "summary": "Plan",
+    "operationId": "plan_api_plan_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PlanRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PlanResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/trips/confirm": {
+   "post": {
+    "summary": "Trips Confirm",
+    "operationId": "trips_confirm_api_trips_confirm_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ConfirmRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ConfirmResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/trips/shift-class": {
+   "post": {
+    "summary": "Trips Shift Class",
+    "operationId": "trips_shift_class_api_trips_shift_class_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ShiftRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ShiftResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/trips/emergency": {
+   "post": {
+    "summary": "Trips Emergency",
+    "operationId": "trips_emergency_api_trips_emergency_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/EmergencyRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/EmergencyResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/trips/split-invite": {
+   "post": {
+    "summary": "Trips Split Invite",
+    "operationId": "trips_split_invite_api_trips_split_invite_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SplitInviteRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SplitInviteResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/parcels/quote": {
+   "post": {
+    "summary": "Parcels Quote",
+    "operationId": "parcels_quote_api_parcels_quote_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ParcelQuoteRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ParcelQuoteResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/simulation/state": {
+   "get": {
+    "summary": "Simulation State",
+    "operationId": "simulation_state_api_simulation_state_get",
+    "parameters": [
+     {
+      "name": "session_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Session Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SimState"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/simulation/event": {
+   "post": {
+    "summary": "Simulation Event",
+    "operationId": "simulation_event_api_simulation_event_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SimEventRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SimState"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/voice/intent": {
+   "post": {
+    "summary": "Voice Intent",
+    "operationId": "voice_intent_api_voice_intent_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/VoiceIntentRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/VoiceIntentResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/insights": {
+   "get": {
+    "summary": "Insights",
+    "operationId": "insights_api_insights_get",
+    "parameters": [
+     {
+      "name": "session_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Session Id"
+      }
+     },
+     {
+      "name": "service_date",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string",
+       "format": "date",
+       "default": "2026-11-29",
+       "title": "Service Date"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InsightsResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "AccessibilityIn": {
+    "properties": {
+     "wheelchair": {
+      "type": "boolean",
+      "title": "Wheelchair",
+      "default": false
+     },
+     "big_car": {
+      "type": "boolean",
+      "title": "Big Car",
+      "default": false
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "AccessibilityIn"
+   },
+   "AccessibleDropoff": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "source": {
+      "type": "string",
+      "title": "Source"
+     },
+     "verified": {
+      "type": "boolean",
+      "title": "Verified"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "label",
+     "source",
+     "verified"
+    ],
+    "title": "AccessibleDropoff"
+   },
+   "Assistance": {
+    "properties": {
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "message"
+    ],
+    "title": "Assistance"
+   },
+   "Audit": {
+    "properties": {
+     "candidate_riders_considered": {
+      "type": "integer",
+      "title": "Candidate Riders Considered"
+     },
+     "groups_evaluated": {
+      "type": "integer",
+      "title": "Groups Evaluated"
+     },
+     "routes_evaluated": {
+      "type": "integer",
+      "title": "Routes Evaluated"
+     },
+     "rejections_by_code": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Rejections By Code"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "candidate_riders_considered",
+     "groups_evaluated",
+     "routes_evaluated",
+     "rejections_by_code"
+    ],
+    "title": "Audit"
+   },
+   "Body_timetable_parse_api_timetable_parse_post": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "image": {
+      "anyOf": [
+       {
+        "type": "string",
+        "contentMediaType": "application/octet-stream"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Image"
+     },
+     "file": {
+      "anyOf": [
+       {
+        "type": "string",
+        "contentMediaType": "application/octet-stream"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "File"
+     }
+    },
+    "type": "object",
+    "required": [
+     "session_id"
+    ],
+    "title": "Body_timetable_parse_api_timetable_parse_post"
+   },
+   "CancelOnly": {
+    "properties": {
+     "refund_fils": {
+      "type": "integer",
+      "title": "Refund Fils"
+     },
+     "terms": {
+      "type": "string",
+      "title": "Terms"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "refund_fils",
+     "terms"
+    ],
+    "title": "CancelOnly"
+   },
+   "ClassItem": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]{1,64}$",
+      "title": "Id"
+     },
+     "course": {
+      "type": "string",
+      "maxLength": 80,
+      "title": "Course",
+      "default": ""
+     },
+     "weekday": {
+      "type": "string",
+      "enum": [
+       "Sun",
+       "Mon",
+       "Tue",
+       "Wed",
+       "Thu"
+      ],
+      "title": "Weekday"
+     },
+     "start": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+       },
+       {
+        "type": "string",
+        "const": ""
+       }
+      ],
+      "title": "Start"
+     },
+     "end": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+       },
+       {
+        "type": "string",
+        "const": ""
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "End"
+     },
+     "room": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 60
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Room"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "id",
+     "weekday",
+     "start"
+    ],
+    "title": "ClassItem"
+   },
+   "ClassItemOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "course": {
+      "type": "string",
+      "title": "Course"
+     },
+     "weekday": {
+      "type": "string",
+      "enum": [
+       "Sun",
+       "Mon",
+       "Tue",
+       "Wed",
+       "Thu"
+      ],
+      "title": "Weekday"
+     },
+     "start": {
+      "type": "string",
+      "title": "Start"
+     },
+     "end": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "End"
+     },
+     "room": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Room"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "id",
+     "course",
+     "weekday",
+     "start"
+    ],
+    "title": "ClassItemOut"
+   },
+   "ConfirmRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "rider_token": {
+      "type": "string",
+      "pattern": "^R-[A-Z0-9]{3}$",
+      "title": "Rider Token"
+     },
+     "plan_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9-]{0,40}$",
+      "title": "Plan Id"
+     },
+     "plan_revision": {
+      "type": "integer",
+      "maximum": 1000000.0,
+      "minimum": 0.0,
+      "title": "Plan Revision"
+     },
+     "accepted_fare_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Accepted Fare Fils"
+     },
+     "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{8,64}$",
+      "title": "Idempotency Key"
+     },
+     "decision": {
+      "type": "string",
+      "enum": [
+       "accept",
+       "decline",
+       "cancel_trip"
+      ],
+      "title": "Decision",
+      "default": "accept"
+     },
+     "replaces_trip_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^TRP-[A-Z0-9-]{1,32}$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Replaces Trip Id"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "rider_token",
+     "plan_id",
+     "plan_revision",
+     "accepted_fare_fils",
+     "idempotency_key"
+    ],
+    "title": "ConfirmRequest"
+   },
+   "ConfirmResponse": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "revision": {
+      "type": "integer",
+      "title": "Revision"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "confirmed",
+       "awaiting_consent",
+       "declined",
+       "canceled"
+      ],
+      "title": "Status"
+     },
+     "trip_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Trip Id"
+     },
+     "plan": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PlanOption"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "amount_paid_fils": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Amount Paid Fils"
+     },
+     "wallet": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Wallet"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "pending_consents": {
+      "anyOf": [
+       {
+        "items": {
+         "$ref": "#/components/schemas/ConsentEntry"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Pending Consents"
+     },
+     "idempotent_replay": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotent Replay"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "revision",
+     "status"
+    ],
+    "title": "ConfirmResponse"
+   },
+   "ConsentEntry": {
+    "properties": {
+     "rider_token": {
+      "type": "string",
+      "title": "Rider Token"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "state": {
+      "type": "string",
+      "enum": [
+       "pending",
+       "accepted",
+       "declined"
+      ],
+      "title": "State"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "rider_token",
+     "label",
+     "state"
+    ],
+    "title": "ConsentEntry"
+   },
+   "EmergencyRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "rider_token": {
+      "type": "string",
+      "pattern": "^R-[A-Z0-9]{3}$",
+      "title": "Rider Token"
+     },
+     "campus_id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2,10}$",
+      "title": "Campus Id"
+     },
+     "zone_id": {
+      "type": "string",
+      "pattern": "^[a-z_]{2,32}$",
+      "title": "Zone Id"
+     },
+     "service_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Service Date"
+     },
+     "class_start": {
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+      "title": "Class Start"
+     },
+     "arrival_buffer_min": {
+      "type": "integer",
+      "maximum": 60.0,
+      "minimum": 0.0,
+      "title": "Arrival Buffer Min",
+      "default": 10
+     },
+     "request_time": {
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+      "title": "Request Time"
+     },
+     "gender_pool": {
+      "type": "string",
+      "enum": [
+       "female_only",
+       "male_only"
+      ],
+      "title": "Gender Pool"
+     },
+     "fare_cap_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Fare Cap Fils"
+     },
+     "accessibility": {
+      "$ref": "#/components/schemas/AccessibilityIn",
+      "default": {
+       "wheelchair": false,
+       "big_car": false
+      }
+     },
+     "sharing_opt_in": {
+      "type": "boolean",
+      "title": "Sharing Opt In",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "rider_token",
+     "campus_id",
+     "zone_id",
+     "service_date",
+     "class_start",
+     "request_time",
+     "gender_pool",
+     "fare_cap_fils"
+    ],
+    "title": "EmergencyRequest"
+   },
+   "EmergencyResponse": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "revision": {
+      "type": "integer",
+      "title": "Revision"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "emergency_proposed",
+       "no_option",
+       "solo_handoff_eligible"
+      ],
+      "title": "Status"
+     },
+     "proposal": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Proposal"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "newcomer_fare_fils": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Newcomer Fare Fils"
+     },
+     "existing_riders_fares_unchanged": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Existing Riders Fares Unchanged"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Reason"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "revision",
+     "status",
+     "message"
+    ],
+    "title": "EmergencyResponse"
+   },
+   "Fare": {
+    "properties": {
+     "your_share_fils": {
+      "type": "integer",
+      "title": "Your Share Fils"
+     },
+     "shares": {
+      "anyOf": [
+       {
+        "items": {
+         "$ref": "#/components/schemas/FareShare"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Shares"
+     },
+     "vehicle_total_fils": {
+      "type": "integer",
+      "title": "Vehicle Total Fils"
+     },
+     "hypothetical_reference_fils": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hypothetical Reference Fils"
+     },
+     "delta_vs_reference_fils": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Delta Vs Reference Fils"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "your_share_fils",
+     "vehicle_total_fils"
+    ],
+    "title": "Fare"
+   },
+   "FareShare": {
+    "properties": {
+     "rider_token": {
+      "type": "string",
+      "title": "Rider Token"
+     },
+     "share_fils": {
+      "type": "integer",
+      "title": "Share Fils"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "rider_token",
+     "share_fils"
+    ],
+    "title": "FareShare"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "HealthResponse": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "const": "ok",
+      "title": "Status"
+     },
+     "fixture_version": {
+      "type": "string",
+      "title": "Fixture Version"
+     },
+     "fixture_source": {
+      "type": "string",
+      "title": "Fixture Source"
+     },
+     "gemini_ready": {
+      "type": "boolean",
+      "title": "Gemini Ready"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "status",
+     "fixture_version",
+     "fixture_source",
+     "gemini_ready"
+    ],
+    "title": "HealthResponse"
+   },
+   "InsightsResponse": {
+    "properties": {
+     "requests_by_hour": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Requests By Hour"
+     },
+     "requests_by_zone": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Requests By Zone"
+     },
+     "accessible_requests": {
+      "type": "integer",
+      "title": "Accessible Requests"
+     },
+     "opted_in_riders": {
+      "type": "integer",
+      "title": "Opted In Riders"
+     },
+     "shuttle_seats": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Shuttle Seats"
+     },
+     "wav_available": {
+      "type": "integer",
+      "title": "Wav Available"
+     },
+     "wav_total": {
+      "type": "integer",
+      "title": "Wav Total"
+     },
+     "b2b_semester_pass_example": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "B2B Semester Pass Example"
+     },
+     "prediction": {
+      "anyOf": [
+       {
+        "additionalProperties": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "boolean"
+          }
+         ]
+        },
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Prediction"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "requests_by_hour",
+     "requests_by_zone",
+     "accessible_requests",
+     "opted_in_riders",
+     "shuttle_seats",
+     "wav_available",
+     "wav_total",
+     "b2b_semester_pass_example"
+    ],
+    "title": "InsightsResponse"
+   },
+   "LedgerEntry": {
+    "properties": {
+     "at": {
+      "type": "string",
+      "title": "At"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "debit",
+       "refund"
+      ],
+      "title": "Kind"
+     },
+     "amount_fils": {
+      "type": "integer",
+      "title": "Amount Fils"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "at",
+     "kind",
+     "amount_fils",
+     "note"
+    ],
+    "title": "LedgerEntry"
+   },
+   "ParcelQuoteRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "trip_id": {
+      "type": "string",
+      "pattern": "^TRP-[A-Z0-9-]{1,32}$",
+      "title": "Trip Id"
+     },
+     "declared_value_fils": {
+      "type": "integer",
+      "maximum": 500000.0,
+      "minimum": 0.0,
+      "title": "Declared Value Fils"
+     },
+     "size": {
+      "type": "string",
+      "enum": [
+       "small",
+       "medium"
+      ],
+      "title": "Size"
+     },
+     "weight_g": {
+      "type": "integer",
+      "maximum": 20000.0,
+      "minimum": 1.0,
+      "title": "Weight G"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "trip_id",
+     "declared_value_fils",
+     "size",
+     "weight_g"
+    ],
+    "title": "ParcelQuoteRequest"
+   },
+   "ParcelQuoteResponse": {
+    "properties": {
+     "trip_id": {
+      "type": "string",
+      "pattern": "^TRP-[A-Z0-9-]{1,32}$",
+      "title": "Trip Id"
+     },
+     "corridor_km": {
+      "type": "string",
+      "title": "Corridor Km"
+     },
+     "parcel_fee_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Parcel Fee Fils"
+     },
+     "insurance_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Insurance Fils"
+     },
+     "total_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Total Fils"
+     },
+     "driver_share_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Driver Share Fils"
+     },
+     "jeeny_share_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Jeeny Share Fils"
+     },
+     "shipment_created": {
+      "type": "boolean",
+      "const": false,
+      "title": "Shipment Created",
+      "default": false
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "trip_id",
+     "corridor_km",
+     "parcel_fee_fils",
+     "insurance_fils",
+     "total_fils",
+     "driver_share_fils",
+     "jeeny_share_fils"
+    ],
+    "title": "ParcelQuoteResponse"
+   },
+   "Pickup": {
+    "properties": {
+     "rider_token": {
+      "type": "string",
+      "title": "Rider Token"
+     },
+     "landmark": {
+      "type": "string",
+      "title": "Landmark"
+     },
+     "time": {
+      "type": "string",
+      "title": "Time"
+     },
+     "is_you": {
+      "type": "boolean",
+      "title": "Is You"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "rider_token",
+     "landmark",
+     "time",
+     "is_you"
+    ],
+    "title": "Pickup"
+   },
+   "PlanOption": {
+    "properties": {
+     "plan_id": {
+      "type": "string",
+      "title": "Plan Id"
+     },
+     "relaxed": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Relaxed"
+     },
+     "utility": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Utility"
+     },
+     "leave_home": {
+      "type": "string",
+      "title": "Leave Home"
+     },
+     "arrival": {
+      "type": "string",
+      "title": "Arrival"
+     },
+     "deadline": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Deadline"
+     },
+     "pickup_order": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Pickup Order"
+     },
+     "pickups": {
+      "anyOf": [
+       {
+        "items": {
+         "$ref": "#/components/schemas/Pickup"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Pickups"
+     },
+     "fare": {
+      "$ref": "#/components/schemas/Fare"
+     },
+     "vehicle": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Vehicle"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "accessible_dropoff": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/AccessibleDropoff"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "hard_filters_passed": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hard Filters Passed"
+     },
+     "flags": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Flags"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "plan_id",
+     "relaxed",
+     "leave_home",
+     "arrival",
+     "pickup_order",
+     "fare"
+    ],
+    "title": "PlanOption"
+   },
+   "PlanRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "rider_token": {
+      "type": "string",
+      "pattern": "^R-[A-Z0-9]{3}$",
+      "title": "Rider Token"
+     },
+     "campus_id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2,10}$",
+      "title": "Campus Id"
+     },
+     "zone_id": {
+      "type": "string",
+      "pattern": "^[a-z_]{2,32}$",
+      "title": "Zone Id"
+     },
+     "service_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Service Date"
+     },
+     "class_start": {
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+      "title": "Class Start"
+     },
+     "arrival_buffer_min": {
+      "type": "integer",
+      "maximum": 60.0,
+      "minimum": 0.0,
+      "title": "Arrival Buffer Min",
+      "default": 10
+     },
+     "pickup_mode": {
+      "type": "string",
+      "enum": [
+       "door_to_door",
+       "main_road_shuttle"
+      ],
+      "title": "Pickup Mode",
+      "default": "door_to_door"
+     },
+     "gender_pool": {
+      "type": "string",
+      "enum": [
+       "female_only",
+       "male_only"
+      ],
+      "title": "Gender Pool"
+     },
+     "desired_companions": {
+      "type": "integer",
+      "maximum": 3.0,
+      "minimum": 0.0,
+      "title": "Desired Companions"
+     },
+     "booking": {
+      "type": "string",
+      "enum": [
+       "day_ahead",
+       "on_demand"
+      ],
+      "title": "Booking",
+      "default": "day_ahead"
+     },
+     "preferred_pickup": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Preferred Pickup"
+     },
+     "fare_cap_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Fare Cap Fils"
+     },
+     "accessibility": {
+      "$ref": "#/components/schemas/AccessibilityIn",
+      "default": {
+       "wheelchair": false,
+       "big_car": false
+      }
+     },
+     "sharing_opt_in": {
+      "type": "boolean",
+      "title": "Sharing Opt In",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "rider_token",
+     "campus_id",
+     "zone_id",
+     "service_date",
+     "class_start",
+     "gender_pool",
+     "desired_companions",
+     "fare_cap_fils"
+    ],
+    "title": "PlanRequest"
+   },
+   "PlanResponse": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "plan_revision": {
+      "type": "integer",
+      "title": "Plan Revision"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "exact_match",
+       "best_deal_proposed",
+       "no_feasible_route",
+       "no_accessible_route"
+      ],
+      "title": "Status"
+     },
+     "exact_match_found": {
+      "type": "boolean",
+      "title": "Exact Match Found"
+     },
+     "options": {
+      "items": {
+       "$ref": "#/components/schemas/PlanOption"
+      },
+      "type": "array",
+      "title": "Options"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Reason"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "assistance": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Assistance"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "requires_approval": {
+      "type": "boolean",
+      "title": "Requires Approval"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     },
+     "unbookable_comparisons": {
+      "items": {
+       "$ref": "#/components/schemas/PlanOption"
+      },
+      "type": "array",
+      "title": "Unbookable Comparisons",
+      "default": []
+     },
+     "rejected": {
+      "items": {
+       "$ref": "#/components/schemas/RejectionOut"
+      },
+      "type": "array",
+      "title": "Rejected",
+      "default": []
+     },
+     "compute_ms": {
+      "type": "number",
+      "title": "Compute Ms",
+      "default": 0.0
+     },
+     "audit": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Audit"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "plan_revision",
+     "status",
+     "exact_match_found",
+     "options",
+     "requires_approval"
+    ],
+    "title": "PlanResponse"
+   },
+   "Proposal": {
+    "properties": {
+     "proposal_id": {
+      "type": "string",
+      "title": "Proposal Id"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "smart_rescue",
+       "class_shift",
+       "emergency"
+      ],
+      "title": "Kind"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     },
+     "plan_revision": {
+      "type": "integer",
+      "title": "Plan Revision"
+     },
+     "plan": {
+      "$ref": "#/components/schemas/PlanOption"
+     },
+     "previous_your_share_fils": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Previous Your Share Fils"
+     },
+     "delta_fils": {
+      "type": "integer",
+      "title": "Delta Fils"
+     },
+     "refund_fils": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Refund Fils"
+     },
+     "new_charge_fils": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "New Charge Fils"
+     },
+     "next_class": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ClassItemOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "requires_approval": {
+      "type": "boolean",
+      "title": "Requires Approval"
+     },
+     "consents": {
+      "items": {
+       "$ref": "#/components/schemas/ConsentEntry"
+      },
+      "type": "array",
+      "title": "Consents"
+     },
+     "alternatives": {
+      "anyOf": [
+       {
+        "items": {
+         "$ref": "#/components/schemas/ProposalAlternative"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Alternatives"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "proposal_id",
+     "kind",
+     "message",
+     "plan_revision",
+     "plan",
+     "delta_fils",
+     "requires_approval",
+     "consents"
+    ],
+    "title": "Proposal"
+   },
+   "ProposalAlternative": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "your_share_fils": {
+      "type": "integer",
+      "title": "Your Share Fils"
+     },
+     "delta_fils": {
+      "type": "integer",
+      "title": "Delta Fils"
+     },
+     "flags": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Flags"
+     },
+     "selectable": {
+      "type": "boolean",
+      "title": "Selectable"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "label",
+     "your_share_fils",
+     "delta_fils",
+     "selectable"
+    ],
+    "title": "ProposalAlternative"
+   },
+   "Reason": {
+    "properties": {
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "code",
+     "message"
+    ],
+    "title": "Reason"
+   },
+   "RejectionOut": {
+    "properties": {
+     "subject": {
+      "type": "string",
+      "title": "Subject"
+     },
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "detail": {
+      "type": "string",
+      "title": "Detail"
+     },
+     "count": {
+      "type": "integer",
+      "title": "Count",
+      "default": 1
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "subject",
+     "code",
+     "detail"
+    ],
+    "title": "RejectionOut"
+   },
+   "ShiftRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "trip_id": {
+      "type": "string",
+      "pattern": "^TRP-[A-Z0-9-]{1,32}$",
+      "title": "Trip Id"
+     },
+     "rider_token": {
+      "type": "string",
+      "pattern": "^R-[A-Z0-9]{3}$",
+      "title": "Rider Token"
+     },
+     "request_time": {
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+      "title": "Request Time"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "trip_id",
+     "rider_token",
+     "request_time"
+    ],
+    "title": "ShiftRequest"
+   },
+   "ShiftResponse": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "revision": {
+      "type": "integer",
+      "title": "Revision"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "shift_proposed",
+       "no_next_class"
+      ],
+      "title": "Status"
+     },
+     "trip_id": {
+      "type": "string",
+      "title": "Trip Id"
+     },
+     "proposal": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Proposal"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "cancel_only": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/CancelOnly"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "revision",
+     "status",
+     "trip_id",
+     "message"
+    ],
+    "title": "ShiftResponse"
+   },
+   "SimEventRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "event": {
+      "type": "string",
+      "enum": [
+       "cancel",
+       "rider_cancel",
+       "traffic",
+       "shuttle_full",
+       "vehicle_unavailable",
+       "reset",
+       "peer_consent"
+      ],
+      "title": "Event"
+     },
+     "target": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{1,40}$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Target"
+     },
+     "sim_time": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Sim Time"
+     },
+     "multiplier": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^\\d{1,2}(/\\d{1,2})?$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Multiplier"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "event"
+    ],
+    "title": "SimEventRequest"
+   },
+   "SimState": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "revision": {
+      "type": "integer",
+      "title": "Revision"
+     },
+     "sim_time": {
+      "type": "string",
+      "title": "Sim Time"
+     },
+     "service_date": {
+      "type": "string",
+      "title": "Service Date"
+     },
+     "trips": {
+      "items": {
+       "$ref": "#/components/schemas/TripView"
+      },
+      "type": "array",
+      "title": "Trips"
+     },
+     "pending_proposals": {
+      "items": {
+       "$ref": "#/components/schemas/Proposal"
+      },
+      "type": "array",
+      "title": "Pending Proposals"
+     },
+     "wallet": {
+      "$ref": "#/components/schemas/WalletState"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "revision",
+     "sim_time",
+     "service_date",
+     "trips",
+     "pending_proposals",
+     "wallet"
+    ],
+    "title": "SimState"
+   },
+   "SplitInviteRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "trip_id": {
+      "type": "string",
+      "pattern": "^TRP-[A-Z0-9-]{1,32}$",
+      "title": "Trip Id"
+     },
+     "rider_token": {
+      "type": "string",
+      "pattern": "^R-[A-Z0-9]{3}$",
+      "title": "Rider Token"
+     },
+     "invitee_token": {
+      "type": "string",
+      "pattern": "^R-[A-Z0-9]{3}$",
+      "title": "Invitee Token"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "trip_id",
+     "rider_token",
+     "invitee_token"
+    ],
+    "title": "SplitInviteRequest"
+   },
+   "SplitInviteResponse": {
+    "properties": {
+     "invite_token": {
+      "type": "string",
+      "title": "Invite Token"
+     },
+     "trip_id": {
+      "type": "string",
+      "pattern": "^TRP-[A-Z0-9-]{1,32}$",
+      "title": "Trip Id"
+     },
+     "invitee_token": {
+      "type": "string",
+      "pattern": "^R-[A-Z0-9]{3}$",
+      "title": "Invitee Token"
+     },
+     "invitee_share_fils": {
+      "type": "integer",
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "Invitee Share Fils"
+     },
+     "expires_at": {
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+      "title": "Expires At"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "invite_token",
+     "trip_id",
+     "invitee_token",
+     "invitee_share_fils",
+     "expires_at"
+    ],
+    "title": "SplitInviteResponse"
+   },
+   "TimetableConfirmResponse": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "confirmed": {
+      "type": "boolean",
+      "title": "Confirmed"
+     },
+     "class_count": {
+      "type": "integer",
+      "title": "Class Count"
+     },
+     "invalidated_plans": {
+      "type": "boolean",
+      "title": "Invalidated Plans"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "confirmed",
+     "class_count",
+     "invalidated_plans"
+    ],
+    "title": "TimetableConfirmResponse"
+   },
+   "TimetableRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "classes": {
+      "items": {
+       "$ref": "#/components/schemas/ClassItem"
+      },
+      "type": "array",
+      "maxItems": 40,
+      "minItems": 1,
+      "title": "Classes"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "classes"
+    ],
+    "title": "TimetableRequest"
+   },
+   "TimetableResponse": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "title": "Session Id"
+     },
+     "classes": {
+      "items": {
+       "$ref": "#/components/schemas/ClassItemOut"
+      },
+      "type": "array",
+      "title": "Classes"
+     },
+     "uncertain_fields": {
+      "items": {
+       "$ref": "#/components/schemas/UncertainField"
+      },
+      "type": "array",
+      "title": "Uncertain Fields"
+     },
+     "inference_source": {
+      "type": "string",
+      "enum": [
+       "gemini_vision",
+       "manual",
+       "fixture"
+      ],
+      "title": "Inference Source"
+     },
+     "model": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model"
+     },
+     "source": {
+      "type": "string",
+      "enum": [
+       "simulation",
+       "inference"
+      ],
+      "title": "Source"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "classes",
+     "uncertain_fields",
+     "inference_source",
+     "source"
+    ],
+    "title": "TimetableResponse"
+   },
+   "TripView": {
+    "properties": {
+     "trip_id": {
+      "type": "string",
+      "title": "Trip Id"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "confirmed",
+       "awaiting_consent",
+       "dispatched",
+       "canceled",
+       "completed"
+      ],
+      "title": "Status"
+     },
+     "class_start": {
+      "type": "string",
+      "title": "Class Start"
+     },
+     "plan": {
+      "$ref": "#/components/schemas/PlanOption"
+     },
+     "amount_paid_fils": {
+      "type": "integer",
+      "title": "Amount Paid Fils"
+     },
+     "has_next_class": {
+      "type": "boolean",
+      "title": "Has Next Class"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "trip_id",
+     "status",
+     "class_start",
+     "plan",
+     "amount_paid_fils",
+     "has_next_class"
+    ],
+    "title": "TripView"
+   },
+   "UncertainField": {
+    "properties": {
+     "class_id": {
+      "type": "string",
+      "title": "Class Id"
+     },
+     "field": {
+      "type": "string",
+      "enum": [
+       "course",
+       "weekday",
+       "start",
+       "end",
+       "room"
+      ],
+      "title": "Field"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "class_id",
+     "field",
+     "reason"
+    ],
+    "title": "UncertainField"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   },
+   "Vehicle": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "sedan",
+       "big_car",
+       "wav"
+      ],
+      "title": "Kind"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "wheelchair_accessible": {
+      "type": "boolean",
+      "title": "Wheelchair Accessible"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "kind",
+     "label",
+     "wheelchair_accessible"
+    ],
+    "title": "Vehicle"
+   },
+   "VoiceIntentRequest": {
+    "properties": {
+     "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Session Id"
+     },
+     "transcript": {
+      "type": "string",
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Transcript"
+     },
+     "locale": {
+      "type": "string",
+      "enum": [
+       "ar-JO",
+       "en"
+      ],
+      "title": "Locale",
+      "default": "ar-JO"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "session_id",
+     "transcript"
+    ],
+    "title": "VoiceIntentRequest"
+   },
+   "VoiceIntentResponse": {
+    "properties": {
+     "intent": {
+      "type": "string",
+      "enum": [
+       "plan_trip",
+       "read_route",
+       "accept_best_deal",
+       "approve_rescue",
+       "decline",
+       "shift_to_next_class",
+       "emergency_ride",
+       "repeat",
+       "unknown"
+      ],
+      "title": "Intent"
+     },
+     "confidence": {
+      "type": "number",
+      "title": "Confidence"
+     },
+     "slots": {
+      "additionalProperties": {
+       "type": "string"
+      },
+      "type": "object",
+      "title": "Slots"
+     },
+     "readback_ar": {
+      "type": "string",
+      "title": "Readback Ar"
+     },
+     "readback_en": {
+      "type": "string",
+      "title": "Readback En"
+     },
+     "requires_confirmation": {
+      "type": "boolean",
+      "title": "Requires Confirmation"
+     },
+     "action_taken": {
+      "type": "string",
+      "const": "none",
+      "title": "Action Taken",
+      "default": "none"
+     },
+     "plan_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^[A-Z0-9-]{1,40}$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Plan Id"
+     },
+     "plan_revision": {
+      "type": "integer",
+      "title": "Plan Revision"
+     },
+     "fare_fils": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 10000000.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Fare Fils"
+     },
+     "source": {
+      "type": "string",
+      "const": "simulation",
+      "title": "Source",
+      "default": "simulation"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "intent",
+     "confidence",
+     "slots",
+     "readback_ar",
+     "readback_en",
+     "requires_confirmation",
+     "plan_revision"
+    ],
+    "title": "VoiceIntentResponse"
+   },
+   "Wallet": {
+    "properties": {
+     "balance_fils": {
+      "type": "integer",
+      "title": "Balance Fils"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "balance_fils"
+    ],
+    "title": "Wallet"
+   },
+   "WalletState": {
+    "properties": {
+     "balance_fils": {
+      "type": "integer",
+      "title": "Balance Fils"
+     },
+     "ledger": {
+      "items": {
+       "$ref": "#/components/schemas/LedgerEntry"
+      },
+      "type": "array",
+      "title": "Ledger"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "balance_fils",
+     "ledger"
+    ],
+    "title": "WalletState"
+   }
+  }
+ }
+}

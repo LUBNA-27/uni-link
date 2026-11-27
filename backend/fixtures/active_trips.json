@@ -1,0 +1,29 @@
+{
+  "source": "simulation",
+  "trips": [
+    {
+      "trip_id": "TRP-0002",
+      "service_date": "2026-11-30",
+      "campus_id": "JUST",
+      "gender_pool": "female_only",
+      "vehicle_id": "SED-05",
+      "seats_offered": 3,
+      "riders": [
+        {
+          "token": "R-6EM",
+          "fare_fils": 1500
+        },
+        {
+          "token": "R-2EM",
+          "fare_fils": 1260
+        }
+      ],
+      "pass_point": "X_TRP0002",
+      "pass_eta": "08:01",
+      "detour_km": "0.8",
+      "remaining_km_after_pickup": "12",
+      "remaining_min_after_pickup": 16,
+      "baseline_arrival": "08:15"
+    }
+  ]
+}

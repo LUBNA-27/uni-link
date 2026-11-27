@@ -1,0 +1,101 @@
+{
+  "source": "simulation",
+  "points": {
+    "A": {
+      "lat": 32.556,
+      "lng": 35.87
+    },
+    "B": {
+      "lat": 32.548,
+      "lng": 35.888
+    },
+    "C": {
+      "lat": 32.544,
+      "lng": 35.897
+    },
+    "D": {
+      "lat": 32.54,
+      "lng": 35.906
+    },
+    "JUST_GATE": {
+      "lat": 32.495,
+      "lng": 35.991
+    },
+    "P_irbid_east": {
+      "lat": 32.553,
+      "lng": 35.876
+    },
+    "T_irbid": {
+      "lat": 32.53,
+      "lng": 35.928
+    },
+    "X_TRP0002": {
+      "lat": 32.5523,
+      "lng": 35.8775
+    },
+    "W": {
+      "lat": 32.022,
+      "lng": 35.839
+    },
+    "AAU_GATE": {
+      "lat": 32.043,
+      "lng": 35.861
+    },
+    "H_sweileh": {
+      "lat": 32.03,
+      "lng": 35.845
+    },
+    "N1": {
+      "lat": 32.565,
+      "lng": 35.85
+    },
+    "N2": {
+      "lat": 32.57,
+      "lng": 35.845
+    },
+    "S1P": {
+      "lat": 32.025,
+      "lng": 35.835
+    },
+    "S2P": {
+      "lat": 32.02,
+      "lng": 35.842
+    }
+  },
+  "zones": {
+    "irbid_east": {
+      "campus_ids": [
+        "JUST"
+      ],
+      "meet_point": "P_irbid_east",
+      "walk_to_meet_min": 5,
+      "hub": "T_irbid"
+    },
+    "irbid_nuzha": {
+      "campus_ids": [
+        "JUST"
+      ],
+      "meet_point": "N2",
+      "walk_to_meet_min": 6,
+      "hub": "T_irbid"
+    },
+    "sweileh": {
+      "campus_ids": [
+        "AAU"
+      ],
+      "meet_point": "S2P",
+      "walk_to_meet_min": 7,
+      "hub": "H_sweileh"
+    }
+  },
+  "campuses": {
+    "JUST": {
+      "gate_point": "JUST_GATE",
+      "step_free_dropoff": "verified"
+    },
+    "AAU": {
+      "gate_point": "AAU_GATE",
+      "step_free_dropoff": "verified"
+    }
+  }
+}

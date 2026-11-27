@@ -1,0 +1,8 @@
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30
+pydantic>=2.7,<3
+python-multipart>=0.0.9
+h3>=4.1,<5
+google-genai>=1.51   # ThinkingLevel (Gemini 3.x thinking_level) first shipped in 1.51
+httpx>=0.27
+pytest>=8.0

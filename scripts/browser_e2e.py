@@ -1,0 +1,92 @@
+"""Headless-Chrome check of the real frontend against the live backend (plain URL, default LIVE flags). Needs: pip install playwright,
+and a running server:  uvicorn backend.main:app --port 8000   then   python scripts/browser_e2e.py"""
+import json, sys, urllib.request
+from playwright.sync_api import sync_playwright
+BASE = "http://localhost:8000"; S = "br-e2e-01"
+def api(path, body):
+    req = urllib.request.Request(BASE+path, data=json.dumps(body).encode(), method="POST", headers={"Content-Type":"application/json"})
+    return json.loads(urllib.request.urlopen(req).read())
+log = []
+def step(m): log.append(m); print("  ", m)
+with sync_playwright() as p:
+    b = p.chromium.launch(executable_path="/usr/bin/google-chrome", headless=True, args=["--no-sandbox"])
+    pg = b.new_page(viewport={"width": 420, "height": 900})
+    errors = []
+    pg.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+    pg.on("pageerror", lambda e: errors.append(str(e)))
+    api("/api/simulation/event", {"session_id": S, "event": "reset"})
+    pg.goto(f"{BASE}/?session={S}")   # plain URL: DEFAULT_LIVE must be all true
+    pg.wait_for_selector("text=Your timetable, once.")
+    assert pg.locator("text=some screens use temporary MOCK").count() == 0, "MOCK banner shown on the plain URL"
+    step("plain URL (no ?live) — no MOCK banner, all endpoints live")
+    pg.click("text=Enter classes manually")
+    pg.fill("input[aria-label='Course']", "CS 201")
+    pg.click("text=Add a class")
+    pg.locator("input[aria-label='Course']").nth(1).fill("AI 305")
+    pg.locator("input[aria-label='Start time']").nth(1).fill("11:30")
+    pg.click("text=Check my classes"); pg.wait_for_selector("text=Entered manually")
+    pg.click("text=Confirm timetable"); pg.wait_for_selector("text=Plan your ride")
+    step("manual timetable → /api/timetable/manual + /confirm (live)")
+    pg.click("text=Find my ride"); pg.wait_for_selector("text=No exact match — here is your Best Deal")
+    cards = pg.locator("article[aria-label^='Best Deal option']")
+    t1, t2 = cards.nth(0).inner_text(), cards.nth(1).inner_text()
+    assert "08:17" in t1 and "1.86" in t1 and "85.25" in t1, t1
+    assert "08:08" in t2 and "1.565" in t2 and "80.00" in t2, t2
+    assert "Simulation data · live engine" in pg.content()
+    pg.screenshot(path="/tmp/unilink_shot_1_best_deal.png", full_page=True)
+    step("Best Deal rendered from live engine: BD1 08:17 / 1.86 / 85.25, BD2 08:08 / 1.565 / 80.00")
+    cards.nth(0).locator("button", has_text="Choose this").click()
+    pg.check("input[type=checkbox]"); pg.click("text=Confirm · pay JOD 1.86 from Wallet")
+    pg.wait_for_selector("text=You are booked")
+    pg.wait_for_selector("text=JOD 10.14")
+    pg.screenshot(path="/tmp/unilink_shot_2_booked.png", full_page=True)
+    step("booked BD1 → Wallet 10.14 shown from /api/simulation/state")
+    api("/api/simulation/event", {"session_id": S, "event": "cancel", "target": "R-9TD", "sim_time": "06:55"})
+    pg.click("button[aria-label=Refresh]")
+    pg.wait_for_selector("article[aria-label='SMART RESCUE proposal']")
+    rt = pg.locator("article[aria-label='SMART RESCUE proposal']").inner_text()
+    assert "1.90" in rt and "08:15" in rt and "2.49" in rt and "4.26" in rt, rt
+    pg.screenshot(path="/tmp/unilink_shot_3_rescue.png", full_page=True)
+    step("co-rider cancel → Smart Rescue card: 1.90 (+0.04), 08:15, pair 2.49 / solo 4.26 not bookable")
+    pg.click("text=Approve JOD +0.04")
+    pg.wait_for_selector("text=waiting for the other riders")
+    assert "JOD 10.14" in pg.content()
+    step("requester approved → awaiting consent, still 10.14 (nothing charged)")
+    api("/api/simulation/event", {"session_id": S, "event": "peer_consent"})
+    pg.click("button[aria-label=Refresh]"); pg.wait_for_selector("text=JOD 10.10")
+    step("peer consent (simulated) → committed, wallet 10.10")
+    pg.click("text=My first class was canceled")
+    pg.fill("input[type=time]", "07:05")
+    pg.click("text=Find my next class")
+    pg.wait_for_selector("article[aria-label='CLASS SHIFT proposal']")
+    ct = pg.locator("article[aria-label='CLASS SHIFT proposal']").inner_text()
+    assert "11:15" in ct and "1.90" in ct and "1.86" in ct and "10:47" in ct, ct
+    pg.screenshot(path="/tmp/unilink_shot_4_class_shift.png", full_page=True)
+    pg.click("text=Switch to my 11:30 class")
+    pg.wait_for_selector("text=Class shifted. Your old seat was released.")
+    pg.wait_for_selector("text=JOD 10.14")
+    led = pg.locator("ul[aria-label='Wallet ledger']").inner_text()
+    pg.screenshot(path="/tmp/unilink_shot_5_after_shift.png", full_page=True)
+    step(f"class shift approved → wallet 10.14; ledger: {' | '.join(led.splitlines())}")
+    # Zaid — separate session
+    pg2 = b.new_page(viewport={"width": 420, "height": 900})
+    pg2.on("pageerror", lambda e: errors.append(str(e)))
+    api("/api/simulation/event", {"session_id": "br-zaid-01", "event": "reset"})
+    pg2.goto(f"{BASE}/?session=br-zaid-01")
+    pg2.click("text=Simulation controls"); pg2.click("text=Load Zaid demo")
+    pg2.wait_for_selector("text=Plan your ride"); pg2.click("text=Find my ride")
+    pg2.wait_for_selector("text=Exact match found")
+    zt = pg2.locator("article[aria-label='Journey boarding pass']").inner_text()
+    assert "08:45" in zt and "2.70" in zt and "WAV-01" in zt and "NOT verified" in zt, zt
+    pg2.screenshot(path="/tmp/unilink_shot_6_zaid_wav.png", full_page=True)
+    step("Zaid (separate session): WAV-01, 2.70, arrive 08:45, drop-off 'NOT verified' label")
+    pg2.click("text=Simulation controls"); pg2.click("text=WAV-01 unavailable")
+    pg2.click("button[aria-label=Close]"); pg2.click("text=Edit request"); pg2.click("text=Find my ride")
+    pg2.wait_for_selector("text=No accessible vehicle right now")
+    pg2.screenshot(path="/tmp/unilink_shot_7_zaid_no_option.png", full_page=True)
+    step("WAV-01 unavailable → honest no-option screen with assistance text")
+    b.close()
+    real = [e for e in errors if "favicon" not in e]
+    step(f"browser console/page errors: {len(real)} {real[:3]}")
+    if real: sys.exit(1)
+print("BROWSER E2E PASSED")

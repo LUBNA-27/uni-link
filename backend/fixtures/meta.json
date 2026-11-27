@@ -1,0 +1,5 @@
+{
+  "fixture_version": "unilink-backend-ref-2026.11.27-revE",
+  "source": "simulation",
+  "note": "Reference fixtures bundled with backend/. Set UNILINK_DATA_DIR to use data/ once schemas are aligned."
+}

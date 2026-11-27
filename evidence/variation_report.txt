@@ -1,0 +1,25 @@
+class 08:00                    no_feasible_route   [] NO_FEASIBLE_ROUTE
+class 08:30                    best_deal_proposed  [('BD1', 'companions 3→2', 1860, '07:44', '08:17', 3, 'sedan'), ('BD2', 'departure −10 min', 1565, '07:34', '08:08', 4, 'sedan')] 
+class 08:45                    best_deal_proposed  [('BD1', 'companions 3→2', 1860, '07:44', '08:17', 3, 'sedan'), ('BD2', 'departure −10 min', 1565, '07:34', '08:08', 4, 'sedan')] 
+class 09:00                    no_feasible_route   [] NO_FEASIBLE_ROUTE
+class 11:30                    best_deal_proposed  [('BD1', 'companions 3→2', 1860, '07:44', '08:17', 3, 'sedan')] 
+class 11:30 c2 pk10:47         exact_match         [('M1', None, 1860, '10:47', '11:15', 3, 'sedan')] 
+class 11:30 c3 pk10:47         best_deal_proposed  [('BD1', 'companions 3→2', 1860, '10:47', '11:15', 3, 'sedan')] 
+cap 1000                       no_feasible_route   [] NO_FEASIBLE_ROUTE
+cap 1500                       no_feasible_route   [] NO_FEASIBLE_ROUTE
+cap 1565                       best_deal_proposed  [('BD1', 'departure −10 min', 1565, '07:34', '08:08', 4, 'sedan')] 
+cap 1859                       best_deal_proposed  [('BD1', 'departure −10 min', 1565, '07:34', '08:08', 4, 'sedan')] 
+cap 1860                       best_deal_proposed  [('BD1', 'companions 3→2', 1860, '07:44', '08:17', 3, 'sedan'), ('BD2', 'departure −10 min', 1565, '07:34', '08:08', 4, 'sedan')] 
+cap 5000                       best_deal_proposed  [('BD1', 'companions 3→2', 1860, '07:44', '08:17', 3, 'sedan'), ('BD2', 'departure −10 min', 1565, '07:34', '08:08', 4, 'sedan')] 
+companions 0                   no_feasible_route   [] NO_FEASIBLE_ROUTE
+companions 1                   best_deal_proposed  [('BD1', 'pickup mode → main_road_shuttle', 1210, '07:37', '08:13', 2, 'sedan')] 
+companions 2                   exact_match         [('M1', None, 1860, '07:44', '08:17', 3, 'sedan')] 
+companions 3                   best_deal_proposed  [('BD1', 'companions 3→2', 1860, '07:44', '08:17', 3, 'sedan'), ('BD2', 'departure −10 min', 1565, '07:34', '08:08', 4, 'sedan')] 
+companions 0 cap 5000          exact_match         [('M1', None, 4260, '07:44', '08:11', 1, 'sedan')] 
+pickup 07:30 c2                exact_match         [('M1', None, 1860, '07:30', '08:03', 3, 'sedan')] 
+pickup 07:40 c2                exact_match         [('M1', None, 1860, '07:40', '08:13', 3, 'sedan')] 
+pickup 07:50 c2                best_deal_proposed  [('BD1', 'pickup mode → main_road_shuttle', 940, '07:37', '08:13', 3, 'sedan'), ('BD2', 'departure −10 min', 1860, '07:40', '08:13', 3, 'sedan')] 
+pickup 07:54 c2                best_deal_proposed  [('BD1', 'pickup mode → main_road_shuttle', 940, '07:37', '08:13', 3, 'sedan'), ('BD2', 'departure −10 min', 1860, '07:44', '08:17', 3, 'sedan')] 
+all sedans out c2              best_deal_proposed  [('BD1', 'pickup mode → main_road_shuttle', 1000, '07:37', '08:13', 3, 'big_car')] 
+all sedans+big out c2          no_feasible_route   [] NO_FEASIBLE_ROUTE
+big car required c2            best_deal_proposed  [('BD1', 'pickup mode → main_road_shuttle', 1000, '07:37', '08:13', 3, 'big_car')] 

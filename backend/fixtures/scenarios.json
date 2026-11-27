@@ -1,0 +1,26 @@
+{
+  "source": "simulation",
+  "scenarios": {
+    "cancel": {
+      "event": "rider_cancel",
+      "target": "R-9TD",
+      "sim_time": "06:55"
+    },
+    "traffic": {
+      "event": "traffic",
+      "target": "all",
+      "sim_time": "07:00",
+      "multiplier": "8/5"
+    },
+    "full": {
+      "event": "shuttle_full",
+      "target": "S1",
+      "sim_time": "07:47"
+    },
+    "wav_out": {
+      "event": "vehicle_unavailable",
+      "target": "WAV-01",
+      "sim_time": "07:00"
+    }
+  }
+}

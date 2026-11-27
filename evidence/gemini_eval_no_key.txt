@@ -1,0 +1,9 @@
+
+demo_A.png: HTTP 503, round trip 12 ms
+   {'code': 'VISION_UNAVAILABLE', 'message': 'timetable AI is not configured; use Quick Manual Entry', 'error': {'code': 'VISION_UNAVAILABLE', 'message': 'timetable AI is not configured; use Quick Manual Entry'}}
+
+demo_B.png: HTTP 503, round trip 2 ms
+   {'code': 'VISION_UNAVAILABLE', 'message': 'timetable AI is not configured; use Quick Manual Entry', 'error': {'code': 'VISION_UNAVAILABLE', 'message': 'timetable AI is not configured; use Quick Manual Entry'}}
+
+demo_C.png: HTTP 503, round trip 2 ms
+   {'code': 'VISION_UNAVAILABLE', 'message': 'timetable AI is not configured; use Quick Manual Entry', 'error': {'code': 'VISION_UNAVAILABLE', 'message': 'timetable AI is not configured; use Quick Manual Entry'}}

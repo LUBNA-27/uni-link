@@ -1,0 +1,141 @@
+{
+  "source": "simulation",
+  "vehicles": [
+    {
+      "vehicle_id": "SED-01",
+      "class": "sedan",
+      "seats": 4,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "SED-02",
+      "class": "sedan",
+      "seats": 4,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "SED-03",
+      "class": "sedan",
+      "seats": 4,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "SED-04",
+      "class": "sedan",
+      "seats": 4,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "SED-05",
+      "class": "sedan",
+      "seats": 4,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "SED-06",
+      "class": "sedan",
+      "seats": 4,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "BIG-01",
+      "class": "big_car",
+      "seats": 6,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "BIG-02",
+      "class": "big_car",
+      "seats": 6,
+      "wheelchair_slots": 0,
+      "has_ramp": false,
+      "ramp_verified": false,
+      "available": true,
+      "zone_ids": [
+        "irbid_east",
+        "irbid_nuzha",
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "WAV-01",
+      "class": "wav",
+      "seats": 2,
+      "wheelchair_slots": 1,
+      "has_ramp": true,
+      "ramp_verified": true,
+      "available": true,
+      "zone_ids": [
+        "sweileh"
+      ]
+    },
+    {
+      "vehicle_id": "WAV-02",
+      "class": "wav",
+      "seats": 2,
+      "wheelchair_slots": 1,
+      "has_ramp": true,
+      "ramp_verified": true,
+      "available": false,
+      "zone_ids": [
+        "sweileh"
+      ]
+    }
+  ]
+}

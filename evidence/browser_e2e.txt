@@ -1,0 +1,12 @@
+   plain URL (no ?live) — no MOCK banner, all endpoints live
+   manual timetable → /api/timetable/manual + /confirm (live)
+   Best Deal rendered from live engine: BD1 08:17 / 1.86 / 85.25, BD2 08:08 / 1.565 / 80.00
+   booked BD1 → Wallet 10.14 shown from /api/simulation/state
+   co-rider cancel → Smart Rescue card: 1.90 (+0.04), 08:15, pair 2.49 / solo 4.26 not bookable
+   requester approved → awaiting consent, still 10.14 (nothing charged)
+   peer consent (simulated) → committed, wallet 10.10
+   class shift approved → wallet 10.14; ledger: 06:00 · Booking BD1 | −JOD 1.86 | 06:55 · Rescue revision — extra share | −JOD 0.04 | 07:05 · Old 08:30 booking released | +JOD 1.90 | 07:05 · New 11:30 booking | −JOD 1.86
+   Zaid (separate session): WAV-01, 2.70, arrive 08:45, drop-off 'NOT verified' label
+   WAV-01 unavailable → honest no-option screen with assistance text
+   browser console/page errors: 0 []
+BROWSER E2E PASSED

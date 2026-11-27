@@ -1,0 +1,36 @@
+UniLink live smoke against http://localhost:8000  (session smoke-f19ab594)
+  ok   health ok, gemini_ready=False
+  ok   timetable confirmed
+  ok   strict request → best_deal_proposed
+  ok   BD1 1860 / 08:17 / 85.25
+  ok   BD1 shares 1860+1380+1260 = 4500
+  ok   BD2 1565 / 08:08 / 80.00
+  ok   booked BD1, wallet 12000 → 10140
+  ok   co-rider cancel 06:55 → Smart Rescue R2 1900 (+40)
+  ok   requester approved; nothing charged yet
+  ok   peers consented → committed, wallet 10100
+  ok   class shift 07:05 → refund 1900 / new 1860
+  ok   11:30 class: pickups 10:47/10:53/10:58 → 11:15
+  ok   class shift committed atomically
+  ok   wallet reconciled 12000→10140→10100→10140, ledger [('debit', 1860), ('debit', 40), ('refund', 1900), ('debit', 1860)]
+  ok   Zaid (separate session) → WAV-01 2700, arrive 08:45
+  ok   accessible drop-off labeled synthetic / not verified
+  ok   WAV-01 out → no_accessible_route, never a sedan
+  ok   Sara's session untouched by Zaid's
+
+measured HTTP round-trips (ms):
+     39.5  GET /api/health
+      3.2  POST /api/timetable/confirm
+      5.5  POST /api/plan
+      2.8  POST /api/trips/confirm
+      3.9  POST /api/simulation/event
+      2.8  POST /api/trips/confirm
+      3.2  POST /api/simulation/event
+      4.2  POST /api/trips/shift-class
+      2.8  POST /api/trips/confirm
+      1.9  GET /api/simulation/state
+      2.5  POST /api/plan
+      1.8  POST /api/simulation/event
+      2.2  POST /api/plan
+      1.8  GET /api/simulation/state
+SMOKE PASSED
