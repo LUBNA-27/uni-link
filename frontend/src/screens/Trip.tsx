@@ -28,6 +28,15 @@ function Toggle({ on, onChange, label, sub, tone = 'magenta' }:
   )
 }
 
+/** Default pickup = 46 min before the class (08:30 → 07:44, the Rev. E demo value). */
+const PICKUP_LEAD_MIN = 46
+function defaultPickup(classStart?: string): string {
+  if (!classStart || !/^\d{2}:\d{2}$/.test(classStart)) return '07:44'
+  const [h, m] = classStart.split(':').map(Number)
+  const mins = Math.max(0, h * 60 + m - PICKUP_LEAD_MIN)
+  return `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`
+}
+
 export default function Trip() {
   const t = useT()
   const { sessionId, riderToken, classes, request, runPlan, go, sim, setSim } = useStore()
@@ -38,7 +47,10 @@ export default function Trip() {
   const [buffer, setBuffer] = useState(init?.arrival_buffer_min ?? 10)
   const [pool, setPool] = useState<GenderPool>(init?.gender_pool ?? 'female_only')
   const [companions, setCompanions] = useState(init?.desired_companions ?? 3)
-  const [pickup, setPickup] = useState(init?.preferred_pickup ?? '07:44')
+  // null = follow the chosen class; a string = an explicit rider edit (or DevDrawer preset).
+  const [pickupOverride, setPickupOverride] = useState<string | null>(
+    init?.preferred_pickup && init.preferred_pickup !== defaultPickup(init.class_start) ? init.preferred_pickup : null,
+  )
   const [capJod, setCapJod] = useState(init ? init.fare_cap_fils / 1000 : 2)
   const [wheelchair, setWheelchair] = useState(init?.accessibility.wheelchair ?? false)
   const [bigCar, setBigCar] = useState(init?.accessibility.big_car ?? false)
@@ -53,6 +65,7 @@ export default function Trip() {
   const wd = weekdayOf(date)
   const todays = useMemo(() => classes.filter((c) => c.weekday === wd).sort((a, b) => a.start.localeCompare(b.start)), [classes, wd])
   const chosen = todays.find((c) => c.start === classStart) ?? todays[0]
+  const pickup = pickupOverride ?? defaultPickup(chosen?.start)
   const campus = ZONES.find((z) => z.zone_id === zone)!.campus_id
   const capFils = Math.round(capJod * 1000)
 
@@ -153,7 +166,7 @@ export default function Trip() {
           <input type="range" min={0} max={3} step={1} value={companions} onChange={(e) => setCompanions(Number(e.target.value))} className="h-10 w-full accent-magenta" />
         </Field>
         <Field label={t('Preferred pickup time')}>
-          <input type="time" className={inputCls} value={pickup} onChange={(e) => setPickup(e.target.value)} />
+          <input type="time" className={inputCls} value={pickup} onChange={(e) => setPickupOverride(e.target.value || null)} />
         </Field>
         <Field label={t('Fare cap (JOD)')} hint={t('Max your share: {x}. You approve every price increase.', { x: `${currency()} ${fmtJod(capFils)} (${fmtFils(capFils)})` })}>
           <input type="number" inputMode="decimal" min={0.5} step={0.1} className={inputCls} value={capJod} onChange={(e) => setCapJod(Number(e.target.value))} />
