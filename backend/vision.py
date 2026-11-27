@@ -26,6 +26,10 @@ log = logging.getLogger("unilink.vision")
 DEFAULT_MODEL = "gemini-3.8-flash"     # Google's recommended Flash for new projects (Nov 2026); override via GEMINI_MODEL
 _MODEL_RE = re.compile(r"^gemini-[a-z0-9][a-z0-9.\-]{2,60}$")
 _THINKING_LEVELS = {"minimal", "low", "medium", "high"}
+# Transient upstream failures (overload / quota spike / deadline): retried once, on the fallback model if set.
+_TRANSIENT_CODES = {429, 500, 502, 503, 504}
+RETRY_BACKOFF_S = 1.0
+RETRY_BUDGET_S = 40.0      # no second attempt once this much time has already been spent
 MAX_BYTES = 5 * 1024 * 1024
 MAX_CLASSES = 40
 SYSTEM_PROMPT = (
@@ -70,6 +74,29 @@ def configured_model() -> str:
     if not _MODEL_RE.match(model):
         raise ApiError(503, "VISION_MISCONFIGURED", "GEMINI_MODEL is not a valid Gemini model id")
     return model
+
+
+def fallback_model() -> Optional[str]:
+    """Optional GEMINI_FALLBACK_MODEL (e.g. a lighter Flash-Lite) tried once when the primary model is
+    overloaded or times out. Validated like GEMINI_MODEL; never taken from a request."""
+    model = (os.environ.get("GEMINI_FALLBACK_MODEL") or "").strip()
+    if not model:
+        return None
+    if not _MODEL_RE.match(model):
+        raise ApiError(503, "VISION_MISCONFIGURED", "GEMINI_FALLBACK_MODEL is not a valid Gemini model id")
+    return model
+
+
+def _status_code(exc: Exception) -> Optional[int]:
+    code = getattr(exc, "code", None)
+    return code if isinstance(code, int) else None
+
+
+def _is_transient(exc: Exception) -> bool:
+    code = _status_code(exc)
+    if code is not None:
+        return code in _TRANSIENT_CODES
+    return "Timeout" in type(exc).__name__ or type(exc).__name__ in {"ServerError", "ConnectError", "ReadError"}
 
 
 def generation_config(model: str) -> Any:
@@ -169,20 +196,26 @@ def parse_image(data: bytes, mime: str) -> tuple[list[TimetableClass], list[str]
     if not gemini_ready():
         raise ApiError(503, "VISION_UNAVAILABLE", "timetable AI is not configured; use Quick Manual Entry")
     from google.genai import types
-    model = configured_model()
-    config = generation_config(model)
+    primary = configured_model()
+    plan = [primary, fallback_model() or primary]      # at most two attempts; the second only if transient
+    contents = [types.Part.from_bytes(data=data, mime_type=mime), USER_PROMPT]
     t0 = time.perf_counter()
-    try:
-        client = client_factory()
-        resp = client.models.generate_content(
-            model=model,
-            contents=[types.Part.from_bytes(data=data, mime_type=mime), USER_PROMPT],
-            config=config)
-    except ApiError:
-        raise
-    except Exception as exc:  # network, auth, quota: never leak details or the key
-        log.warning("vision call failed: %s (model %s)", type(exc).__name__, model)
-        raise ApiError(502, "VISION_FAILED", "timetable AI is unavailable; use Quick Manual Entry") from None
+    resp = None
+    for attempt, model in enumerate(plan):
+        config = generation_config(model)
+        try:
+            client = client_factory()
+            resp = client.models.generate_content(model=model, contents=contents, config=config)
+            break
+        except ApiError:
+            raise
+        except Exception as exc:  # network, auth, quota: log class + HTTP status only, never details or the key
+            log.warning("vision call failed: %s %s (model %s, attempt %d)",
+                        type(exc).__name__, _status_code(exc) or "", model, attempt + 1)
+            last = attempt == len(plan) - 1
+            if last or not _is_transient(exc) or time.perf_counter() - t0 > RETRY_BUDGET_S:
+                raise ApiError(502, "VISION_FAILED", "timetable AI is unavailable; use Quick Manual Entry") from None
+            time.sleep(RETRY_BACKOFF_S)
     try:
         parsed = resp.parsed
         raw = parsed.model_dump() if isinstance(parsed, BaseModel) else json.loads(resp.text or "{}")

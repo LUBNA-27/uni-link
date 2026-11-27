@@ -22,6 +22,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.concurrency import run_in_threadpool
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import contract as C
@@ -122,7 +123,8 @@ async def timetable_parse(session_id: str = Form(...), image: Optional[UploadFil
     data = await upload.read(vision.MAX_BYTES + 1)
     await upload.close()
     mime = vision.sniff_image(data, upload.content_type)
-    classes, uncertain, usage, ms, model = vision.parse_image(data, mime)   # real Gemini call only
+    # real Gemini call only; run off the event loop so one slow upload never freezes the single worker
+    classes, uncertain, usage, ms, model = await run_in_threadpool(vision.parse_image, data, mime)
     del data                                   # no raw image retention
     with s.lock:
         return wire.parse_response(s, classes, uncertain, usage, ms, model)

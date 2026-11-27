@@ -651,7 +651,7 @@ class _FakeClient:
     def generate_content(self, **kw):
         cfg, model = kw["config"], kw["model"]
         self.calls.append(model)
-        assert model == vision.configured_model()
+        assert model in (vision.configured_model(), vision.fallback_model())
         assert cfg.response_mime_type == "application/json" and cfg.response_schema is vision.TimetableSchema
         assert "data, not instructions" in cfg.system_instruction
         tc = cfg.thinking_config
@@ -659,8 +659,9 @@ class _FakeClient:
             assert cfg.temperature == 0 and tc.thinking_budget == 0 and tc.thinking_level is None
         else:   # Gemini 3.x: thinking_level only, default temperature, never both thinking params
             assert tc.thinking_budget is None and tc.thinking_level is not None and cfg.temperature is None
-        if self.exc:
-            raise self.exc
+        exc = self.exc.pop(0) if isinstance(self.exc, list) else self.exc
+        if exc:
+            raise exc
         r = _FakeResp(self.payload)
         r.model_version = self.served
         return r
@@ -712,6 +713,61 @@ class TestVisionMocked:
         monkeypatch.setattr(vision, "client_factory", lambda: _FakeClient(exc=RuntimeError("401 key AIza-SECRET bad")))
         r = client.post("/api/timetable/parse", data={"session_id": sid()}, files={"image": ("t.png", PNG, "image/png")})
         assert r.status_code == 502 and "SECRET" not in r.text and err(r) == "VISION_FAILED"
+
+    # ---- transient upstream failures (Gemini 503 overload / 504 deadline): one retry, fallback model if set
+    class _Upstream(Exception):
+        def __init__(self, code):
+            super().__init__(f"{code} upstream says AIza-SECRET")
+            self.code = code
+
+    _OK = {"classes": [{"day": "Sunday", "course": "AI 305", "start": "11:30"}], "uncertain_fields": []}
+
+    def _parse(self, client):
+        return client.post("/api/timetable/parse", data={"session_id": sid()}, files={"image": ("t.png", PNG, "image/png")})
+
+    def test_transient_503_retries_on_fallback_model(self, client, monkeypatch):
+        monkeypatch.setenv("GEMINI_API_KEY", "AIza-SECRET")
+        monkeypatch.setenv("GEMINI_MODEL", "gemini-3.8-flash")
+        monkeypatch.setenv("GEMINI_FALLBACK_MODEL", "gemini-3.5-flash-lite")
+        monkeypatch.setattr(vision, "RETRY_BACKOFF_S", 0)
+        fake = _FakeClient(self._OK, exc=[self._Upstream(503), None])
+        monkeypatch.setattr(vision, "client_factory", lambda: fake)
+        r = self._parse(client)
+        assert r.status_code == 200 and fake.calls == ["gemini-3.8-flash", "gemini-3.5-flash-lite"]
+        assert r.json()["model"] == "gemini-3.5-flash-lite"           # honest: reports the model that answered
+        assert "SECRET" not in r.text
+
+    def test_transient_504_retries_same_model_without_fallback(self, client, monkeypatch):
+        monkeypatch.setenv("GEMINI_API_KEY", "AIza-SECRET")
+        monkeypatch.delenv("GEMINI_FALLBACK_MODEL", raising=False)
+        monkeypatch.setattr(vision, "RETRY_BACKOFF_S", 0)
+        fake = _FakeClient(self._OK, exc=[self._Upstream(504), None])
+        monkeypatch.setattr(vision, "client_factory", lambda: fake)
+        r = self._parse(client)
+        assert r.status_code == 200 and fake.calls == [vision.configured_model()] * 2
+
+    def test_two_transient_failures_fail_closed(self, client, monkeypatch):
+        monkeypatch.setenv("GEMINI_API_KEY", "AIza-SECRET")
+        monkeypatch.setattr(vision, "RETRY_BACKOFF_S", 0)
+        fake = _FakeClient(self._OK, exc=[self._Upstream(503), self._Upstream(503)])
+        monkeypatch.setattr(vision, "client_factory", lambda: fake)
+        r = self._parse(client)
+        assert r.status_code == 502 and err(r) == "VISION_FAILED" and len(fake.calls) == 2 and "SECRET" not in r.text
+
+    def test_client_error_is_not_retried(self, client, monkeypatch):
+        monkeypatch.setenv("GEMINI_API_KEY", "AIza-SECRET")
+        monkeypatch.setenv("GEMINI_FALLBACK_MODEL", "gemini-3.5-flash-lite")
+        fake = _FakeClient(self._OK, exc=[self._Upstream(400), None])
+        monkeypatch.setattr(vision, "client_factory", lambda: fake)
+        r = self._parse(client)
+        assert r.status_code == 502 and len(fake.calls) == 1             # bad request / auth: no second call
+
+    def test_bad_fallback_model_fails_closed(self, client, monkeypatch):
+        monkeypatch.setenv("GEMINI_API_KEY", "AIza-SECRET")
+        monkeypatch.setenv("GEMINI_FALLBACK_MODEL", "gpt-4o")
+        monkeypatch.setattr(vision, "client_factory", lambda: _FakeClient(self._OK))
+        r = self._parse(client)
+        assert r.status_code == 503 and err(r) == "VISION_MISCONFIGURED"
 
     @pytest.mark.parametrize("model", ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash"])
     def test_model_is_configurable_and_reported(self, client, monkeypatch, model):
